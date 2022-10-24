@@ -1,0 +1,8 @@
+# vscode ================================
+.vscode/*
+
+# CMake ================================
+build/*
+!build/CMakeLists.txt
+
+temp_src
