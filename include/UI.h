@@ -1,8 +1,8 @@
-#ifndef _UI_H_
-#define _UI_H_
+#ifndef __UI_H__
+#define __UI_H__
 
 #include "show_bmp.h"
 
-void show_UI();
+void show_mainUI();
 
 #endif

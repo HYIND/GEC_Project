@@ -4,6 +4,10 @@
 #include <pthread.h>
 #include <memory.h>
 
+#define RADUIS 10
+#define HALF_RECT_WIDTH 50
+#define HALF_RECT_HEIGHT 12
+
 Ball ball;
 Rect rect;
 bool stop_flag = false;
@@ -38,46 +42,22 @@ void Init_Game()
 {
     ball.x = 200;
     ball.y = 100;
-    ball.radius = 10;
+    ball.radius = RADUIS;
     ball.x_speed = 7;
     ball.y_speed = 5;
 
     rect.x = 400;
     rect.y = 420;
-    rect.width = 100;
-    rect.height = 25;
+    rect.width = HALF_RECT_WIDTH * 2;
+    rect.height = HALF_RECT_HEIGHT * 2;
     rect.speed = 5;
 
     stop_flag = false;
 
-    for (int i = 0; i < 800; i++)
-    {
-        for (int j = 0; j < 480; j++)
-        {
-            *(p_lcd + i + j * 800) = 0x000000;
-        }
-    }
-
     //打开字体
     points_font = fontLoad("./simkai.ttf");
-
     //字体大小的设置
     fontSetSize(points_font, 50);
-
-    bitmap *bm = createBitmapWithInit(140, 60, 4, getColor(0, 0, 0, 0));
-    char buf1[] = "得分";
-    fontPrint(points_font, bm, 10, 0, buf1, getColor(0, 255, 255, 255), 140);
-    show_font_to_lcd(p_lcd, 655, 20, bm);
-    destroyBitmap(bm);
-
-    bm = createBitmapWithInit(120, 70, 4, getColor(0, 0, 0, 0));
-    char buf2[] = "退出";
-    fontPrint(points_font, bm, 20, 0, buf2, getColor(0, 255, 255, 255), 120);
-    show_font_to_lcd(p_lcd, 660, 380, bm);
-    destroyBitmap(bm);
-
-    memset(points_buf, '0', 5);
-    draw_points();
 }
 
 void add_points()
@@ -178,24 +158,75 @@ void move_ball()
 
 void draw()
 {
-    for (int i = 0; i < 650; i++)
+    static int lastdraw_ball_x = 300;
+    static int lastdraw_ball_y = 200;
+    static int lastdraw_rect_x = 400;
+    static int lastdraw_rect_y = 420;
+
+    // for (int i = 0; i < 650; i++)
+    // {
+    //     for (int j = 0; j < 480; j++)
+    //     {
+    //         if ((i - ball.x) * (i - ball.x) + (j - ball.y) * (j - ball.y) < ball.radius * ball.radius)
+    //         {
+    //             *(p_lcd + i + j * 800) = 0xFF0000;
+    //         }
+    //         else if (i > rect.x - rect.width / 2 && i < rect.x + rect.width / 2 && j > rect.y - rect.height / 2 && j < rect.y + rect.height / 2)
+    //         {
+    //             *(p_lcd + i + j * 800) = 0x0000FF;
+    //         }
+    //         else
+    //         {
+    //             *(p_lcd + i + j * 800) = 0xFFFFFF;
+    //         }
+    //     }
+    // }
+
+    // 刷新原小球背景
+    for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
     {
-        for (int j = 0; j < 480; j++)
+        for (int j = lastdraw_ball_y - ball.radius; j < lastdraw_ball_y + ball.radius; j++)
         {
-            if ((i - ball.x) * (i - ball.x) + (j - ball.y) * (j - ball.y) < ball.radius * ball.radius)
+            *(p_lcd + i + j * 800) = 0xFFFFFF;
+        }
+    }
+
+    // 画新小球
+    lastdraw_ball_x = ball.x;
+    lastdraw_ball_y = ball.y;
+    for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
+    {
+        for (int j = lastdraw_ball_y - ball.radius; j < lastdraw_ball_y + ball.radius; j++)
+        {
+            if ((i - lastdraw_ball_x) * (i - lastdraw_ball_x) + (j - lastdraw_ball_y) * (j - lastdraw_ball_y) < ball.radius * ball.radius)
             {
                 *(p_lcd + i + j * 800) = 0xFF0000;
             }
-            else if (i > rect.x - rect.width / 2 && i < rect.x + rect.width / 2 && j > rect.y - rect.height / 2 && j < rect.y + rect.height / 2)
-            {
-                *(p_lcd + i + j * 800) = 0x0000FF;
-            }
-            else
-            {
-                *(p_lcd + i + j * 800) = 0xFFFFFF;
-            }
         }
     }
+    // show_location_bmp("basketball.bmp", lastdraw_ball_x - ball.radius, lastdraw_ball_y - ball.radius, ball.radius * 2, ball.radius * 2, p_lcd);
+
+    // 刷新原木板背景
+    for (int i = lastdraw_rect_x - rect.width / 2; i < lastdraw_rect_x + rect.width / 2; i++)
+    {
+        for (int j = lastdraw_rect_y - rect.height / 2; j < lastdraw_rect_y + rect.height / 2; j++)
+        {
+            *(p_lcd + i + j * 800) = 0xFFFFFF;
+        }
+    }
+
+    // 画新木板
+    lastdraw_rect_x = rect.x;
+    lastdraw_rect_y = rect.y;
+    for (int i = lastdraw_rect_x - rect.width / 2; i < lastdraw_rect_x + rect.width / 2; i++)
+    {
+        for (int j = lastdraw_rect_y - rect.height / 2; j < lastdraw_rect_y + rect.height / 2; j++)
+        {
+            *(p_lcd + i + j * 800) = 0x0000FF;
+        }
+    }
+
+    // show_location_bmp("basketball_kun.bmp", lastdraw_rect_x - rect.width / 2, lastdraw_rect_y - rect.height / 2, rect.width, rect.height, p_lcd);
 }
 
 void control()
@@ -238,10 +269,65 @@ void control()
     }
 }
 
-void Game()
+void show_begin()
+{
+    // 绘制游戏区白色背景
+    for (int i = 0; i < 650; i++)
+    {
+        for (int j = 0; j < 480; j++)
+        {
+            *(p_lcd + i + j * 800) = 0xFFFFFF;
+        }
+    }
+
+    // 绘制功能区黑色背景
+    for (int i = 650; i < 800; i++)
+    {
+        for (int j = 0; j < 480; j++)
+        {
+            *(p_lcd + i + j * 800) = 0x000000;
+        }
+    }
+
+    bitmap *bm = createBitmapWithInit(140, 60, 4, getColor(0, 0, 0, 0));
+    char buf1[] = "得分";
+    fontPrint(points_font, bm, 10, 0, buf1, getColor(0, 255, 255, 255), 140);
+    show_font_to_lcd(p_lcd, 655, 20, bm);
+    destroyBitmap(bm);
+
+    bm = createBitmapWithInit(120, 70, 4, getColor(0, 0, 0, 0));
+    char buf2[] = "退出";
+    fontPrint(points_font, bm, 20, 0, buf2, getColor(0, 255, 255, 255), 120);
+    show_font_to_lcd(p_lcd, 660, 380, bm);
+    destroyBitmap(bm);
+
+    memset(points_buf, '0', 5);
+    draw_points();
+}
+
+void show_end()
+{
+    bitmap *bm = createBitmapWithInit(250, 60, 4, getColor(0, 255, 255, 255));
+    char buf1[] = "Game Over!";
+    fontPrint(points_font, bm, 0, 0, buf1, getColor(0, 100, 100, 100), 250);
+    show_font_to_lcd(p_lcd, 240, 200, bm);
+    destroyBitmap(bm);
+
+    bm = createBitmapWithInit(350, 60, 4, getColor(0, 255, 255, 255));
+    char buf2[] = "重新开始   退出游戏";
+    fontPrint(points_font, bm, 0, 0, buf2, getColor(0, 100, 100, 100), 350);
+    show_font_to_lcd(p_lcd, 150, 300, bm);
+    destroyBitmap(bm);
+}
+
+bool Game()
 {
     Init_Game();
 
+    //绘制初始界面
+    show_begin();
+
+    //控制线程
     pthread_t control_thread;
     pthread_create(&control_thread, NULL, &control, NULL);
     while (1)
@@ -255,18 +341,8 @@ void Game()
     }
     pthread_join(control_thread, NULL);
 
-    bitmap *bm = createBitmapWithInit(250, 60, 4, getColor(0, 255, 255, 255));
-    char buf1[] = "Game Over!";
-    fontPrint(points_font, bm, 0, 0, buf1, getColor(0, 100, 100, 100), 250);
-    show_font_to_lcd(p_lcd, 240, 200, bm);
-    destroyBitmap(bm);
-
-    bm = createBitmapWithInit(250, 60, 4, getColor(0, 255, 255, 255));
-    char buf2[] = "点此处离开";
-    fontPrint(points_font, bm, 0, 0, buf2, getColor(0, 100, 100, 100), 250);
-    show_font_to_lcd(p_lcd, 230, 300, bm);
-    destroyBitmap(bm);
-
+    //绘制介绍界面
+    show_end();
     //关闭字体
     fontUnload(points_font);
 
@@ -275,12 +351,18 @@ void Game()
         Get_Touch_Data();
         if (touch.type == EV_KEY && touch.code == BTN_TOUCH && touch.value == 0) //判断手是否离开
         {
-            if (P_I.x > 240 && P_I.x < 490 && P_I.y > 80 && P_I.y < 300)
+            // 重新开始
+            if (P_I.x > 140 && P_I.x < 320 && P_I.y > 280 && P_I.y < 380)
             {
-                break;
+                printf("restart game!\n");
+                return true;
+            }
+            // 退出游戏
+            else if (P_I.x > 330 && P_I.x < 510 && P_I.y > 280 && P_I.y < 380)
+            {
+                printf("exit game!\n");
+                return false;
             }
         }
     }
-
-    printf("exit game!\n");
 }

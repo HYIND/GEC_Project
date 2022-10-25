@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include "header.h"
 #include "game.h"
+#include "album.h"
 
-int main()
+void main_process()
 {
-    my_Init();
-
-    show_mainUI();
     while (1)
     {
         Get_Touch_Data();
@@ -16,7 +14,7 @@ int main()
             if (P_I.x > 20 && P_I.x < 220 && P_I.y > 300 && P_I.y < 440) //相册按钮
             {
                 // loadig();
-                // Video();
+                Album();
                 // show_mainUI();
             }
 
@@ -30,7 +28,7 @@ int main()
             if (P_I.x > 580 && P_I.x < 770 && P_I.y > 300 && P_I.y < 440) //游戏按钮
             {
                 // loadig();
-                Game();
+                while(Game());      //Game返回1时代表重新开始游戏，则继续执行while循环，返回0时则退出游戏
                 show_mainUI();
             }
 
@@ -42,6 +40,14 @@ int main()
             }
         }
     }
+}
+
+int main()
+{
+    my_Init();
+
+    show_mainUI();
+    main_process();
 
     my_close();
     return 0;

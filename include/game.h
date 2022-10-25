@@ -1,7 +1,7 @@
-#ifndef _GAME_H_
-#define _GAME_H_
+#ifndef __GAME_H__
+#define __GAME_H__
 
-#include "touch.h"
+#include "header.h"
 #include <stdbool.h>
 
 struct Ball
@@ -24,6 +24,6 @@ struct Rect
     int speed;
 } typedef Rect;
 
-void Game();
+bool Game();
 
 #endif

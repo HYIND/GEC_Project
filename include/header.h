@@ -4,6 +4,7 @@
 #include "fd.h"
 #include "UI.h"
 #include "touch.h"
+#include "show_bmp.h"
 
 void my_Init();
 
