@@ -6,7 +6,7 @@
 
 #define RADUIS 18
 #define HALF_RECT_WIDTH 60
-#define HALF_RECT_HEIGHT 12
+#define HALF_RECT_HEIGHT 8
 
 Ball ball;
 Rect rect;
@@ -137,14 +137,58 @@ void add_points(int count)
     }
 }
 
+int distance_square(int x1, int y1, int x2, int y2)
+{
+    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+}
+
 bool collision()
 {
-    if (ball.y + ball.radius > rect.y - rect.height / 2 && ball.y + ball.radius < rect.y + rect.height / 2 && ball.x > rect.x - rect.width / 2 && ball.x < rect.x + rect.width / 2)
-    {
-        ball.y = rect.y - rect.height / 2 - ball.radius;
-        ball.y_speed += 2;
-        ball.y_speed = (-ball.y_speed);
+    // if (ball.y + ball.radius > rect.y - rect.height / 2 && ball.y + ball.radius < rect.y + rect.height / 2 && ball.x > rect.x - rect.width / 2 && ball.x < rect.x + rect.width / 2)
 
+    bool flag = false;
+
+    if (
+        (ball.x > rect.x - rect.width / 2 &&
+         ball.x < rect.x + rect.width / 2 &&
+         ball.y > rect.y - rect.height / 2 - ball.radius &&
+         ball.y < rect.y + rect.height / 2 + ball.radius) ||
+        (ball.x > rect.x - rect.width / 2 - ball.radius &&
+         ball.x < rect.x + rect.width / 2 + ball.radius &&
+         ball.y > rect.y - rect.height / 2 &&
+         ball.y < rect.y + rect.height / 2))
+    {
+        flag = true;
+    }
+    else
+    {
+        int vertex_x =
+            abs(rect.x - rect.width / 2 - ball.x) > abs(rect.x + rect.width / 2 - ball.x) ? rect.x - rect.width / 2
+                                                                                          : rect.x + rect.width / 2;
+
+        int vertex_y =
+            abs(rect.y - rect.height / 2 - ball.x) > abs(rect.y + rect.height / 2 - ball.x) ? rect.y - rect.height / 2
+                                                                                            : rect.y + rect.height / 2;
+
+        if (distance_square(vertex_x, vertex_y, ball.x, ball.y) > ball.radius * ball.radius)
+        {
+            flag = true;
+        }
+    }
+
+    if (flag)
+    {
+        if (ball.y <= rect.y)
+        {
+            ball.y = rect.y - rect.height / 2 - ball.radius;
+            ball.y_speed += 2;
+        }
+        else
+        {
+            ball.y = rect.y + rect.height / 2 + ball.radius;
+        }
+        
+        ball.y_speed = (-ball.y_speed);
         add_points(add_count);
         add_count++;
         draw_points();
@@ -229,9 +273,9 @@ void control()
     bool isslide = false;
     while (1)
     {
+        Get_Touch_Data();
         if (stop_flag)
             break;
-        Get_Touch_Data();
         if (touch.type == EV_KEY && touch.code == BTN_TOUCH && touch.value == 0) //判断手是否离开
         {
             printf("x:%d--y:%d\n", P_I.x, P_I.y);
@@ -245,7 +289,7 @@ void control()
         {
             if (touch.type == EV_KEY && touch.code == BTN_TOUCH && touch.value == 1) //按下去
             {
-                if (P_I.x > rect.x - rect.width / 2 - 20 && P_I.x < rect.x + rect.width / 2 + 20 && P_I.y > rect.y - rect.height / 2 - 20)
+                if (P_I.x > rect.x - rect.width / 2 - 30 && P_I.x < rect.x + rect.width / 2 + 30 && P_I.y > rect.y - rect.height / 2 - 30)
                 {
                     isslide = true;
                     continue;
@@ -302,6 +346,8 @@ void show_begin()
 
 void show_end()
 {
+    write(fd_ts, &touch, sizeof(touch));
+
     bitmap *bm = createBitmapWithInit(250, 60, 4, getColor(0, 255, 255, 255));
     char buf1[] = "Game Over!";
     fontPrint(points_font, bm, 0, 0, buf1, getColor(0, 100, 100, 100), 250);
@@ -362,7 +408,7 @@ bool Game()
     }
     pthread_join(control_thread, NULL);
 
-    //绘制介绍界面
+    //绘制结束界面
     show_end();
     //关闭字体
     fontUnload(points_font);
