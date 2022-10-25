@@ -182,6 +182,8 @@ void draw()
     //     }
     // }
 
+    printf("%d %d\n", ball.x, ball.y);
+
     // 刷新原小球背景
     for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
     {

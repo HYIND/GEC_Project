@@ -14,7 +14,6 @@ P_Node New_Node(data_type num)
     return new;
 }
 
-
 int List_Add_To(P_Node head, data_type num, P_Node new)
 {
     if (head == NULL)
