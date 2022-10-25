@@ -1,9 +1,4 @@
 #include "camera.h"
-#include <stdio.h>
-#include "lcd.h"
-#include "yuyv.h"
-#include <pthread.h>
-#include "show_bmp.h"
 
 //设置摄像头启动变量
 int video_show_flag = 0;
@@ -53,12 +48,8 @@ void *real_time_video()
     linux_v4l2_yuyv_quit();
 }
 
-void camera()
+void Camera()
 {
-
-    //打开LCD屏幕
-    lcd_open("/dev/fb0");
-
     //创建一条线程实时监控
     pthread_t pid;
 
@@ -91,9 +82,6 @@ void camera()
             video_show_flag = 0;
         }
     }
-
-    //关闭LCD屏幕
-    close_lcd();
 
     return 0;
 }

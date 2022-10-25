@@ -13,10 +13,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 
 # set(CMAKE_BUILD_TYPE "Debug")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lpthread -lm")
-
 LINK_DIRECTORIES(../libs)
 LINK_LIBRARIES(libfont.a)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lpthread -lm -ljpeg -lapi_v4l2_arm1")
 
 add_executable(myproject ${DIR_SRCS})
 

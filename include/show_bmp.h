@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include "jpeglib.h"
+#include "yuyv.h"
 
 #define LCD_WIDTH 800
 #define LCD_HEIGHT 480
@@ -177,6 +178,6 @@ int pic_oblique_block(char *pathname, int *pic_oblique_block_fd);
 */
 int clear_lcd_screen(int color, int lcd_x_coordinates, int lcd_y_coordinates, int wide, int height, int *lcd_mmap);
 
-int lcd_draw_jpg(unsigned int x, unsigned int y, const char *pjpg_path, char *pjpg_buf, unsigned int jpg_buf_size, unsigned int jpg_half)
+int lcd_draw_jpg(unsigned int x, unsigned int y, const char *pjpg_path, char *pjpg_buf, unsigned int jpg_buf_size, unsigned int jpg_half);
 
 #endif
