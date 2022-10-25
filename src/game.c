@@ -16,6 +16,11 @@ font *points_font;
 char points_buf[6] = "00000";
 int add_count = 1;
 
+bool AD()
+{
+    return false;
+}
+
 void draw_points()
 {
     //创建一个画板（点阵图）
@@ -207,9 +212,15 @@ void move_ball()
     }
     if (ball.y + ball.radius > 480)
     {
-        // ball.y = 400 - ball.radius;
-        // ball.y_speed = (-ball.y_speed);
-        stop_flag = true;
+        if (AD())
+        {
+            ball.y = 400 - ball.radius;
+            ball.y_speed = (-ball.y_speed);
+        }
+        else
+        {
+            stop_flag = true;
+        }
     }
 }
 
@@ -344,7 +355,7 @@ bool Game()
             break;
         draw();
 
-        usleep(10000);
+        usleep(30000);
         // draw_round(&ball);
         // draw_rect(&rect);
         move_ball();

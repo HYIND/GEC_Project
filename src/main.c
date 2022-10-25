@@ -16,7 +16,7 @@ void main_process()
             {
                 // loadig();
                 Album();
-                // show_mainUI();
+                show_mainUI();
             }
 
             if (P_I.x > 250 && P_I.x < 350 && P_I.y > 90 && P_I.y < 190) // mp3按钮
