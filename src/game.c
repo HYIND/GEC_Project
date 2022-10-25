@@ -43,8 +43,8 @@ void Init_Game()
     ball.x = 200;
     ball.y = 100;
     ball.radius = RADUIS;
-    ball.x_speed = 7;
-    ball.y_speed = 5;
+    ball.x_speed = 5;
+    ball.y_speed = 3;
 
     rect.x = 400;
     rect.y = 420;
@@ -338,7 +338,7 @@ bool Game()
             break;
         draw();
 
-        usleep(5000);
+        usleep(10000);
         // draw_round(&ball);
         // draw_rect(&rect);
         move_ball();
