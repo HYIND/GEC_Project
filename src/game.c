@@ -337,6 +337,8 @@ bool Game()
         if (stop_flag)
             break;
         draw();
+
+        usleep(5000);
         // draw_round(&ball);
         // draw_rect(&rect);
         move_ball();
