@@ -5,10 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct
-{
-    char pathname[100];
-} data_type;
+typedef char* data_type;
 
 typedef struct listNode
 {

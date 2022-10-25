@@ -1,8 +1,15 @@
 #include "album.h"
+#include<string.h>
+#include<dirent.h>
+#include<sys/stat.h>
+#include<sys/types.h>
+#include<unistd.h>
+
 
 P_Node cur_node;    //当前正在访问的图片所在链表节点
+P_Node head;
 
-P_Node New_Node(data_type num)
+P_Node New_Node(data_type path)
 {
 
     P_Node new = calloc(1, sizeof(Node));
@@ -111,15 +118,77 @@ int Display_List(P_Node head, bool flag)
     return del;
 } */
 
-void Init_Album()
+void Init_Album(data_type num)
 {
     //读取目录下的图片，生成双向链表
+	
+	// 1.打开目录
+	DIR *dp = opendir("photo");
+	
+	// 2.读取目录项（包括文件名）
+	struct dirent *temp;
+	while(1)
+	{
+		temp = readdir(dp);
+		if(temp == NULL)	//读完，跳出
+			break;
+
+            //成功读取到
+	    printf("%s\n", temp->d_name);
+		
+        if(strstr(temp->d_name,".bmp")) //判断是否为.bmp文件
+			{
+				struct P_Node *new = New_Node(temp->d_name); //创建新节点
+				List_Add_To(head,num[1],new);  //插入新节点
+	        }
+    }
+	// 3.关闭目录
+	closedir(dp);
+
+
 }
 
-void Album()
+void Album(data_type num)
 {
     //初始化相册信息
-    Init_Album();
+    Init_Album(num[1]);
+
+
+    char buf[20];
+	int tx = 0,ty = 0;
+	
+	while(1)
+	{		
+		get_xy(&tx, &ty);//获取触摸屏的坐标
+		if(ty > 190 && ty < 290)
+		{
+			if(tx > 700 && tx < 800)	//右翻
+			{
+				//printf("你点击的坐标位置X坐标是:%d\n", tx);
+				//printf("你点击的坐标位置Y坐标是:%d\n", ty);
+				head = head->next;
+				bzero(buf,20);
+				sprintf(buf,"%s/%s",num[1],head->Data);
+			}
+			if(tx < 100 && tx > 0)		//左翻
+			{
+				//printf("你点击的坐标位置X坐标是:%d\n", tx);
+				//printf("你点击的坐标位置Y坐标是:%d\n", ty);
+				head = head->prev;
+				bzero(buf,20);
+				sprintf(buf,"%s/%s",num[1],head->Data);
+			}
+			//showbmp("background.bmp");//开发板下，可执行文件目录下存放的背景图（可以使用绝对路径！）
+			//show_1152000bmp(buf);	//显示BMP图片
+		}	
+		
+		if(tx > 700 && ty < 100)
+		{
+			show_mainUI();
+			break;
+		}
+	}
+
 
 /*     while (1)
     {
