@@ -17,4 +17,6 @@ extern struct points P_I;
 
 void Get_Touch_Data();
 
+int get_ts(int *x, int *y);
+
 #endif

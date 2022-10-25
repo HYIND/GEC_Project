@@ -30,34 +30,68 @@ void draw_points()
     destroyBitmap(bm);
 }
 
-void draw_round()
+void draw_ball()
 {
+    static int lastdraw_ball_x = 300;
+    static int lastdraw_ball_y = 200;
+
+    // 刷新原小球背景
+    for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
+    {
+        for (int j = lastdraw_ball_y - ball.radius; j < lastdraw_ball_y + ball.radius; j++)
+        {
+            *(p_lcd + i + j * 800) = 0xFFFFFF;
+        }
+    }
+
+    // 画新小球
+    lastdraw_ball_x = ball.x;
+    lastdraw_ball_y = ball.y;
+    for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
+    {
+        for (int j = lastdraw_ball_y - ball.radius; j < lastdraw_ball_y + ball.radius; j++)
+        {
+            if ((i - lastdraw_ball_x) * (i - lastdraw_ball_x) + (j - lastdraw_ball_y) * (j - lastdraw_ball_y) < ball.radius * ball.radius)
+            {
+                *(p_lcd + i + j * 800) = 0xFF0000;
+            }
+        }
+    }
+    // show_location_bmp("basketball.bmp", lastdraw_ball_x - ball.radius, lastdraw_ball_y - ball.radius, ball.radius * 2, ball.radius * 2, p_lcd);
 }
 
 void draw_rect()
 {
+    static int lastdraw_rect_x = 400;
+    static int lastdraw_rect_y = 420;
+
+    // 刷新原木板背景
+    for (int i = lastdraw_rect_x - rect.width / 2; i < lastdraw_rect_x + rect.width / 2; i++)
+    {
+        for (int j = lastdraw_rect_y - rect.height / 2; j < lastdraw_rect_y + rect.height / 2; j++)
+        {
+            *(p_lcd + i + j * 800) = 0xFFFFFF;
+        }
+    }
+
+    // 画新木板
+    lastdraw_rect_x = rect.x;
+    lastdraw_rect_y = rect.y;
+    for (int i = lastdraw_rect_x - rect.width / 2; i < lastdraw_rect_x + rect.width / 2; i++)
+    {
+        for (int j = lastdraw_rect_y - rect.height / 2; j < lastdraw_rect_y + rect.height / 2; j++)
+        {
+            *(p_lcd + i + j * 800) = 0x0000FF;
+        }
+    }
+
+    // show_location_bmp("basketball_kun.bmp", lastdraw_rect_x - rect.width / 2, lastdraw_rect_y - rect.height / 2, rect.width, rect.height, p_lcd);
 }
 
-void Init_Game()
+void draw()
 {
-    ball.x = 200;
-    ball.y = 100;
-    ball.radius = RADUIS;
-    ball.x_speed = 5;
-    ball.y_speed = 3;
-
-    rect.x = 400;
-    rect.y = 420;
-    rect.width = HALF_RECT_WIDTH * 2;
-    rect.height = HALF_RECT_HEIGHT * 2;
-    rect.speed = 5;
-
-    stop_flag = false;
-
-    //打开字体
-    points_font = fontLoad("./simkai.ttf");
-    //字体大小的设置
-    fontSetSize(points_font, 50);
+    draw_ball();
+    draw_rect();
 }
 
 void add_points()
@@ -156,81 +190,6 @@ void move_ball()
     }
 }
 
-void draw()
-{
-    static int lastdraw_ball_x = 300;
-    static int lastdraw_ball_y = 200;
-    static int lastdraw_rect_x = 400;
-    static int lastdraw_rect_y = 420;
-
-    // for (int i = 0; i < 650; i++)
-    // {
-    //     for (int j = 0; j < 480; j++)
-    //     {
-    //         if ((i - ball.x) * (i - ball.x) + (j - ball.y) * (j - ball.y) < ball.radius * ball.radius)
-    //         {
-    //             *(p_lcd + i + j * 800) = 0xFF0000;
-    //         }
-    //         else if (i > rect.x - rect.width / 2 && i < rect.x + rect.width / 2 && j > rect.y - rect.height / 2 && j < rect.y + rect.height / 2)
-    //         {
-    //             *(p_lcd + i + j * 800) = 0x0000FF;
-    //         }
-    //         else
-    //         {
-    //             *(p_lcd + i + j * 800) = 0xFFFFFF;
-    //         }
-    //     }
-    // }
-
-    printf("%d %d\n", ball.x, ball.y);
-
-    // 刷新原小球背景
-    for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
-    {
-        for (int j = lastdraw_ball_y - ball.radius; j < lastdraw_ball_y + ball.radius; j++)
-        {
-            *(p_lcd + i + j * 800) = 0xFFFFFF;
-        }
-    }
-
-    // 画新小球
-    lastdraw_ball_x = ball.x;
-    lastdraw_ball_y = ball.y;
-    for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
-    {
-        for (int j = lastdraw_ball_y - ball.radius; j < lastdraw_ball_y + ball.radius; j++)
-        {
-            if ((i - lastdraw_ball_x) * (i - lastdraw_ball_x) + (j - lastdraw_ball_y) * (j - lastdraw_ball_y) < ball.radius * ball.radius)
-            {
-                *(p_lcd + i + j * 800) = 0xFF0000;
-            }
-        }
-    }
-    // show_location_bmp("basketball.bmp", lastdraw_ball_x - ball.radius, lastdraw_ball_y - ball.radius, ball.radius * 2, ball.radius * 2, p_lcd);
-
-    // 刷新原木板背景
-    for (int i = lastdraw_rect_x - rect.width / 2; i < lastdraw_rect_x + rect.width / 2; i++)
-    {
-        for (int j = lastdraw_rect_y - rect.height / 2; j < lastdraw_rect_y + rect.height / 2; j++)
-        {
-            *(p_lcd + i + j * 800) = 0xFFFFFF;
-        }
-    }
-
-    // 画新木板
-    lastdraw_rect_x = rect.x;
-    lastdraw_rect_y = rect.y;
-    for (int i = lastdraw_rect_x - rect.width / 2; i < lastdraw_rect_x + rect.width / 2; i++)
-    {
-        for (int j = lastdraw_rect_y - rect.height / 2; j < lastdraw_rect_y + rect.height / 2; j++)
-        {
-            *(p_lcd + i + j * 800) = 0x0000FF;
-        }
-    }
-
-    // show_location_bmp("basketball_kun.bmp", lastdraw_rect_x - rect.width / 2, lastdraw_rect_y - rect.height / 2, rect.width, rect.height, p_lcd);
-}
-
 void control()
 {
     bool isslide = false;
@@ -315,11 +274,33 @@ void show_end()
     show_font_to_lcd(p_lcd, 240, 200, bm);
     destroyBitmap(bm);
 
-    bm = createBitmapWithInit(350, 60, 4, getColor(0, 255, 255, 255));
+    bm = createBitmapWithInit(500, 60, 4, getColor(0, 255, 255, 255));
     char buf2[] = "重新开始   退出游戏";
-    fontPrint(points_font, bm, 0, 0, buf2, getColor(0, 100, 100, 100), 350);
-    show_font_to_lcd(p_lcd, 150, 300, bm);
+    fontPrint(points_font, bm, 0, 0, buf2, getColor(0, 100, 100, 100), 500);
+    show_font_to_lcd(p_lcd, 100, 300, bm);
     destroyBitmap(bm);
+}
+
+void Init_Game()
+{
+    ball.x = 200;
+    ball.y = 100;
+    ball.radius = RADUIS;
+    ball.x_speed = 5;
+    ball.y_speed = 3;
+
+    rect.x = 400;
+    rect.y = 420;
+    rect.width = HALF_RECT_WIDTH * 2;
+    rect.height = HALF_RECT_HEIGHT * 2;
+    rect.speed = 5;
+
+    stop_flag = false;
+
+    //打开字体
+    points_font = fontLoad("./simkai.ttf");
+    //字体大小的设置
+    fontSetSize(points_font, 50);
 }
 
 bool Game()
@@ -356,13 +337,13 @@ bool Game()
         if (touch.type == EV_KEY && touch.code == BTN_TOUCH && touch.value == 0) //判断手是否离开
         {
             // 重新开始
-            if (P_I.x > 140 && P_I.x < 320 && P_I.y > 280 && P_I.y < 380)
+            if (P_I.x > 90 && P_I.x < 250 && P_I.y > 280 && P_I.y < 380)
             {
                 printf("restart game!\n");
                 return true;
             }
             // 退出游戏
-            else if (P_I.x > 330 && P_I.x < 510 && P_I.y > 280 && P_I.y < 380)
+            else if (P_I.x > 290 && P_I.x < 470 && P_I.y > 280 && P_I.y < 380)
             {
                 printf("exit game!\n");
                 return false;

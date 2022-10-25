@@ -7,6 +7,7 @@ int take_photo_flag = 0;
 
 void *real_time_video()
 {
+    printf("%c", "real_time_video");
     struct jpg_data video_buf;
 
     //初始化摄像头设备
@@ -17,7 +18,6 @@ void *real_time_video()
 
     while (1)
     {
-
         //获取摄像头数据
         linux_v4l2_get_yuyv_data(&video_buf);
 
@@ -52,36 +52,43 @@ void Camera()
 {
     //创建一条线程实时监控
     pthread_t pid;
+    video_show_flag = 1;
+    pthread_create(&pid, NULL, &real_time_video, NULL);
 
     int x, y;
     while (1)
     {
         get_ts(&x, &y);
-        if (x < 100 && y < 80)
+        if (x > 700 && y < 96)
         {
+            video_show_flag = 0;
             break; //退出
         }
-        else if (x > 700 && y < 80)
+        else if (x > 700 && y < 192)
         {
             take_photo_flag = 1; //抓拍
             printf("抓拍\n");
         }
-        else if (x > 700 && y > 400)
+        else if (x > 700 && y < 288)
         {
+            video_show_flag = 0;
+            pthread_join(pid, NULL);
             lcd_draw_jpg(0, 0, "photo/photo.jpg", NULL, NULL, 0);
         }
-        else if (x < 400)
+        else if (x > 700 && y < 384)
         {
-            printf("打开摄像头\n");
-            pthread_create(&pid, NULL, real_time_video, NULL);
+            if (video_show_flag == 1)
+                continue;
             video_show_flag = 1;
+            printf("打开摄像头\n");
+            pthread_create(&pid, NULL, &real_time_video, NULL);
         }
-        else if (x > 400)
+        else if (x > 700 && y < 480)
         {
             printf("关闭摄像头\n");
             video_show_flag = 0;
         }
     }
-
-    return 0;
+    video_show_flag = 0;
+    pthread_join(pid, NULL);
 }
