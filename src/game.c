@@ -4,8 +4,8 @@
 #include <pthread.h>
 #include <memory.h>
 
-#define RADUIS 10
-#define HALF_RECT_WIDTH 50
+#define RADUIS 18
+#define HALF_RECT_WIDTH 60
 #define HALF_RECT_HEIGHT 12
 
 Ball ball;
@@ -14,6 +14,7 @@ bool stop_flag = false;
 
 font *points_font;
 char points_buf[6] = "00000";
+int add_count = 1;
 
 void draw_points()
 {
@@ -35,10 +36,14 @@ void draw_ball()
     static int lastdraw_ball_x = 300;
     static int lastdraw_ball_y = 200;
 
+    int left = lastdraw_ball_x - ball.radius;
+    int right = lastdraw_ball_x + ball.radius;
+    int top = lastdraw_ball_y - ball.radius;
+    int bottom = lastdraw_ball_y + ball.radius;
     // 刷新原小球背景
-    for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
+    for (int i = left; i < right; i++)
     {
-        for (int j = lastdraw_ball_y - ball.radius; j < lastdraw_ball_y + ball.radius; j++)
+        for (int j = top; j < bottom; j++)
         {
             *(p_lcd + i + j * 800) = 0xFFFFFF;
         }
@@ -47,17 +52,21 @@ void draw_ball()
     // 画新小球
     lastdraw_ball_x = ball.x;
     lastdraw_ball_y = ball.y;
-    for (int i = lastdraw_ball_x - ball.radius; i < lastdraw_ball_x + ball.radius; i++)
-    {
-        for (int j = lastdraw_ball_y - ball.radius; j < lastdraw_ball_y + ball.radius; j++)
-        {
-            if ((i - lastdraw_ball_x) * (i - lastdraw_ball_x) + (j - lastdraw_ball_y) * (j - lastdraw_ball_y) < ball.radius * ball.radius)
-            {
-                *(p_lcd + i + j * 800) = 0xFF0000;
-            }
-        }
-    }
-    // show_location_bmp("basketball.bmp", lastdraw_ball_x - ball.radius, lastdraw_ball_y - ball.radius, ball.radius * 2, ball.radius * 2, p_lcd);
+    left = lastdraw_ball_x - ball.radius;
+    right = lastdraw_ball_x + ball.radius;
+    top = lastdraw_ball_y - ball.radius;
+    bottom = lastdraw_ball_y + ball.radius;
+    // for (int i = left; i < right; i++)
+    // {
+    //     for (int j = top; j < bottom; j++)
+    //     {
+    //         if ((i - lastdraw_ball_x) * (i - lastdraw_ball_x) + (j - lastdraw_ball_y) * (j - lastdraw_ball_y) < ball.radius * ball.radius)
+    //         {
+    //             *(p_lcd + i + j * 800) = 0xFF0000;
+    //         }
+    //     }
+    // }
+    show_location_bmp("game_pic/basketball.bmp", left, top, ball.radius * 2, ball.radius * 2, p_lcd);
 }
 
 void draw_rect()
@@ -65,10 +74,15 @@ void draw_rect()
     static int lastdraw_rect_x = 400;
     static int lastdraw_rect_y = 420;
 
+    int left = lastdraw_rect_x - rect.width / 2;
+    int right = lastdraw_rect_x + rect.width / 2;
+    int top = lastdraw_rect_y - rect.height / 2;
+    int bottom = lastdraw_rect_y + rect.height / 2;
+
     // 刷新原木板背景
-    for (int i = lastdraw_rect_x - rect.width / 2; i < lastdraw_rect_x + rect.width / 2; i++)
+    for (int i = left; i < right; i++)
     {
-        for (int j = lastdraw_rect_y - rect.height / 2; j < lastdraw_rect_y + rect.height / 2; j++)
+        for (int j = top; j < bottom; j++)
         {
             *(p_lcd + i + j * 800) = 0xFFFFFF;
         }
@@ -77,15 +91,19 @@ void draw_rect()
     // 画新木板
     lastdraw_rect_x = rect.x;
     lastdraw_rect_y = rect.y;
-    for (int i = lastdraw_rect_x - rect.width / 2; i < lastdraw_rect_x + rect.width / 2; i++)
+    left = lastdraw_rect_x - rect.width / 2;
+    right = lastdraw_rect_x + rect.width / 2;
+    top = lastdraw_rect_y - rect.height / 2;
+    bottom = lastdraw_rect_y + rect.height / 2;
+    for (int i = left; i < right; i++)
     {
-        for (int j = lastdraw_rect_y - rect.height / 2; j < lastdraw_rect_y + rect.height / 2; j++)
+        for (int j = top; j < bottom; j++)
         {
             *(p_lcd + i + j * 800) = 0x0000FF;
         }
     }
 
-    // show_location_bmp("basketball_kun.bmp", lastdraw_rect_x - rect.width / 2, lastdraw_rect_y - rect.height / 2, rect.width, rect.height, p_lcd);
+    // show_location_bmp("basketball_kun.bmp", left, top, rect.width, rect.height, p_lcd);
 }
 
 void draw()
@@ -94,19 +112,23 @@ void draw()
     draw_rect();
 }
 
-void add_points()
+void add_points(int count)
 {
-    for (int i = 4; i >= 0; i--)
+    while (count > 0)
     {
-        if (points_buf[i] < '9')
+        for (int i = 4; i >= 0; i--)
         {
-            points_buf[i]++;
-            return;
+            if (points_buf[i] < '9')
+            {
+                points_buf[i]++;
+                break;
+            }
+            else
+            {
+                points_buf[i] = '0';
+            }
         }
-        else
-        {
-            points_buf[i] = '0';
-        }
+        count--;
     }
 }
 
@@ -118,7 +140,8 @@ bool collision()
         ball.y_speed += 2;
         ball.y_speed = (-ball.y_speed);
 
-        add_points();
+        add_points(add_count);
+        add_count++;
         draw_points();
 
         return true;
@@ -296,6 +319,8 @@ void Init_Game()
     rect.speed = 5;
 
     stop_flag = false;
+
+    add_count = 1;
 
     //打开字体
     points_font = fontLoad("./simkai.ttf");

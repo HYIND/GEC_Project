@@ -178,6 +178,8 @@ int pic_oblique_block(char *pathname, int *pic_oblique_block_fd);
 */
 int clear_lcd_screen(int color, int lcd_x_coordinates, int lcd_y_coordinates, int wide, int height, int *lcd_mmap);
 
+void lcd_draw_point(unsigned int x, unsigned int y, unsigned int color);
+
 int lcd_draw_jpg(unsigned int x, unsigned int y, const char *pjpg_path, char *pjpg_buf, unsigned int jpg_buf_size, unsigned int jpg_half);
 
 #endif
