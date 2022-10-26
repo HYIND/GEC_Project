@@ -12,7 +12,6 @@ P_Node head;
 
 static void show_UI()
 {
-
 }
 
 void Init_Album()
@@ -53,12 +52,20 @@ void Init_Album()
 
 void switch_photo(P_Node node)
 {
-     clear_lcd_screen(0XFFFFFF, 0, 0, 800, 480, p_lcd);
+    clear_lcd_screen(0XFFFFFF, 0, 0, 800, 480, p_lcd);
     // show_1152000bmp("windows_pic/albumbkg.bmp", p_lcd); //开发板下，可执行文件目录下存放的背景图（可以使用绝对路径！）
     if (node != head)
     {
         printf("%s\n", node->Data);
-        show_1152000bmp(node->Data, p_lcd); //显示BMP图片
+
+        if (strstr(node->Data, ".bmp"))
+        {
+            show_1152000bmp(node->Data, p_lcd); //显示BMP图片
+        }
+        if (strstr(node->Data, ".jpg"))
+        {
+            lcd_draw_jpg(0, 0, node->Data, NULL, NULL, 0); //显示JPG图片
+        }
     }
     show_UI(); //显示UI
 
@@ -70,7 +77,7 @@ void Album()
     //初始化相册信息
     Init_Album();
 
-    switch_photo(head);
+    cur_node = head;
 
     int tx = 0, ty = 0;
 
