@@ -6,6 +6,8 @@
 #include <pthread.h>
 #include "show_bmp.h"
 #include "touch.h"
+#include "time.h"
+#include <stdlib.h>
 
 void Camera();
 

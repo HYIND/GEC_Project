@@ -26,8 +26,12 @@ void *real_time_video()
 
         if (take_photo_flag == 1) //进行抓拍
         {
+            char path[256] = {0};
+            time_t now;
+            time(&now);
+            sprintf(path, "%s%d.jpg", "photo/camera_photo_", now);
             //创建一个新的文件
-            int fd = open("photo/photo.jpg", O_RDWR | O_CREAT, 0777);
+            int fd = open(path, O_RDWR | O_CREAT, 0777);
             if (fd == -1)
             {
                 perror("拍照失败");

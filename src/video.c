@@ -93,7 +93,10 @@ void switch_video(P_Node node)
     {
         send_cmd(fd_fifo, "quit\n");
     }
-
+    if (node == head)
+    {
+        node = node->next;
+    }
     if (node != head)
     {
         char *command = calloc(1, 256);
@@ -129,7 +132,7 @@ void Video()
     //初始化视频信息
     Init_Video();
 
-    switch_video(head);
+    cur_node = head;
 
     int tx = 0, ty = 0;
 
