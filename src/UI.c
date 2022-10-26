@@ -28,13 +28,13 @@ void show_gameoverUI()
 void show_cameraUI()
 {
 
-     for (int i = 700; i < 800; i++)
+    for (int i = 700; i < 800; i++)
     {
         for (int j = 0; j < 480; j++)
         {
             *(p_lcd + i + j * 800) = 0x000000;
         }
     }
-     show_location_bmp("windows_pic/takephoto.bmp",700,190, 100, 100, p_lcd);
-     show_location_bmp("windows_pic/exit.bmp", 700, 0, 100 , 100, p_lcd);
+    show_location_bmp("windows_pic/takephoto.bmp", 700, 190, 100, 100, p_lcd);
+    show_location_bmp("windows_pic/exit.bmp", 700, 0, 100, 100, p_lcd);
 }
