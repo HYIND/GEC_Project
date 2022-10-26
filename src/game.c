@@ -349,17 +349,7 @@ void show_end()
 {
     write(fd_ts, &touch, sizeof(touch));
 
-    bitmap *bm = createBitmapWithInit(250, 60, 4, getColor(0, 255, 255, 255));
-    char buf1[] = "Game Over!";
-    fontPrint(points_font, bm, 0, 0, buf1, getColor(0, 100, 100, 100), 250);
-    show_font_to_lcd(p_lcd, 240, 200, bm);
-    destroyBitmap(bm);
-
-    bm = createBitmapWithInit(500, 60, 4, getColor(0, 255, 255, 255));
-    char buf2[] = "重新开始   退出游戏";
-    fontPrint(points_font, bm, 0, 0, buf2, getColor(0, 100, 100, 100), 500);
-    show_font_to_lcd(p_lcd, 100, 300, bm);
-    destroyBitmap(bm);
+    show_gameoverUI();
 }
 
 void Init_Game()
@@ -422,13 +412,13 @@ bool Game()
         if (touch.type == EV_KEY && touch.code == BTN_TOUCH && touch.value == 0) //判断手是否离开
         {
             // 重新开始
-            if (P_I.x > 90 && P_I.x < 250 && P_I.y > 280 && P_I.y < 380)
+            if (P_I.x > 240 && P_I.x < 340 && P_I.y > 320 && P_I.y < 363)
             {
                 printf("restart game!\n");
                 return true;
             }
             // 退出游戏
-            else if (P_I.x > 290 && P_I.x < 470 && P_I.y > 280 && P_I.y < 380)
+            else if (P_I.x > 380 && P_I.x < 480 && P_I.y > 320 && P_I.y < 363)
             {
                 printf("exit game!\n");
                 return false;
