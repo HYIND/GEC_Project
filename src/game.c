@@ -336,7 +336,7 @@ void show_begin()
     destroyBitmap(bm);
 
     bm = createBitmapWithInit(120, 70, 4, getColor(0, 0, 0, 0));
-    char buf2[] = "退出";
+    char buf2[] = "暂停";
     fontPrint(points_font, bm, 20, 0, buf2, getColor(0, 255, 255, 255), 120);
     show_font_to_lcd(p_lcd, 660, 380, bm);
     destroyBitmap(bm);

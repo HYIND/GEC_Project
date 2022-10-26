@@ -10,6 +10,7 @@ bool stop_flag;
 
 static void show_UI()
 {
+    show_location_bmp("windows_pic/musicUI.bmp", 0, 360, 600, 120, p_lcd);
 }
 
 static int send_cmd(int fd_fifo, const char *cmd)
