@@ -59,6 +59,8 @@ void Camera()
     video_show_flag = 1;
     pthread_create(&pid, NULL, &real_time_video, NULL);
 
+    show_cameraUI();
+    
     int x, y;
     while (1)
     {
