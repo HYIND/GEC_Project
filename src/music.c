@@ -10,6 +10,7 @@ bool stop_flag;
 
 static void show_UI()
 {
+    
 }
 
 static int send_cmd(int fd_fifo, const char *cmd)

@@ -7,5 +7,5 @@ build/*
 
 temp_src
 
-# bin
-# bin/myproject
+bin
+bin/myproject
