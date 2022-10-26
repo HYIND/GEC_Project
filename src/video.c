@@ -6,7 +6,18 @@ P_Node cur_node; //当前正在观看的视频所在链表节点
 P_Node head;
 
 int fd_fifo;
-bool stop_flag;
+bool stop_flag = false;
+bool play_flag = false;
+
+int bar_rate = 0;
+
+static void show_bar() //显示进度条，bar_rate为百分比
+{
+    clear_lcd_screen(0x000000, 0, 350, 600, 30, p_lcd);                        // 进度条背景
+    clear_lcd_screen(0x858585, 20, 360, 560, 10, p_lcd);                       // 进度条
+    clear_lcd_screen(0xf38b00, 20, 360, (int)(bar_rate * 5.6), 10, p_lcd);     // 已播放的部分进度条绘橙色
+    clear_lcd_screen(0x000000, 5 + (int)(bar_rate * 5.6), 357, 30, 16, p_lcd); // 滑块
+}
 
 static void show_UI()
 {
@@ -64,7 +75,7 @@ void Init_Video()
         //成功读取到
         // printf("%s\n", temp->d_name);
 
-        if (strstr(temp->d_name, ".mp4") || strstr(temp->d_name, ".avi")) //判断是否为.mp4/.avi文件
+        if (strstr(temp->d_name, ".avi")) //判断是否为.avi文件
         {
             char *path = calloc(1, strlen(photodir) + strlen(temp->d_name) + 1);
             sprintf(path, "%s/%s", photodir, temp->d_name);
@@ -76,6 +87,8 @@ void Init_Video()
     closedir(dp);
 
     // Display_List(head, true);
+
+    bar_rate = 0;
 }
 
 void close_video()
@@ -83,8 +96,11 @@ void close_video()
     Release_List(head);
     head = cur_node = NULL;
     if (fd_fifo != -1)
+    {
         close(fd_fifo);
-    stop_flag = false;
+        fd_fifo = -1;
+    }
+    play_flag = false;
 }
 
 void switch_video(P_Node node)
@@ -93,10 +109,12 @@ void switch_video(P_Node node)
     {
         send_cmd(fd_fifo, "quit\n");
     }
+
     if (node == head)
     {
         node = node->next;
     }
+
     if (node != head)
     {
         char *command = calloc(1, 256);
@@ -120,11 +138,25 @@ void switch_video(P_Node node)
             return;
         }
         printf("视频正在播放....\n");
-        stop_flag = false;
+        play_flag = true;
     }
     show_UI(); //显示UI
 
     cur_node = node;
+}
+
+void bar() // 进度条线程
+{
+    while (!stop_flag)
+    {
+        if (play_flag) //视频正在播放则更新进度条信息
+        {
+            // 1.获取进度条百分比
+
+            // 2.根据百分比绘进度条
+            show_bar();
+        }
+    }
 }
 
 void Video()
@@ -136,8 +168,11 @@ void Video()
 
     int tx = 0, ty = 0;
 
-    bool stop = false;
-    while (!stop)
+    pthread_t bar_thread;
+    pthread_create(&bar_thread, NULL, &bar, NULL);
+
+    stop_flag = false;
+    while (!stop_flag)
     {
         int slide = get_ts(&tx, &ty); //获取触摸屏的坐标
         switch (slide)
@@ -146,7 +181,7 @@ void Video()
         {
             if (tx > 700 && ty < 100)
             {
-                stop = true; //退出
+                stop_flag = true; //退出
                 break;
             }
             else
@@ -155,7 +190,7 @@ void Video()
                 if (300 < tx & tx < 500 && ty > 300)
                 {
                     send_cmd(fd_fifo, "pause\n");
-                    stop_flag = !stop_flag;
+                    play_flag = !play_flag;
                 }
 
                 if (tx < 100 && tx > 0) //切换下一个视频
@@ -169,23 +204,17 @@ void Video()
             }
         }
         break;
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3: //左滑
-        {
-            // switch_video(cur_node->prev);
-        }
-        break;
-
-        case 4: //右滑
-        {
-            // switch_video(cur_node->next);
-        }
-        break;
+            // case 1: //下滑
+            //     break;
+            // case 2: //上滑
+            //     break;
+            // case 3: //左滑
+            //     break;
+            // case 4: //右滑
+            //     break;
         }
     }
+    pthread_join(bar_thread, NULL);
 
     close_video();
 }

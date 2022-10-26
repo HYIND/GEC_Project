@@ -9,6 +9,7 @@
 #include "touch.h"
 #include "deque.h"
 #include "show_bmp.h"
+#include <pthread.h>
 
 void Music();
 

@@ -8,6 +8,8 @@
 #include <unistd.h>
 #include "deque.h"
 #include "show_bmp.h"
+#include "touch.h"
+#include <pthread.h>
 
 void Video();
 

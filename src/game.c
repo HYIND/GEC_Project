@@ -399,10 +399,11 @@ bool Game()
         // draw_rect(&rect);
         move_ball();
     }
-    pthread_join(control_thread, NULL);
-
     //绘制结束界面
     show_end();
+
+    pthread_join(control_thread, NULL);
+
     //关闭字体
     fontUnload(points_font);
 

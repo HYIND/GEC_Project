@@ -6,11 +6,22 @@ P_Node cur_node; //当前正在播放的音频所在链表节点
 P_Node head;
 
 int fd_fifo;
-bool stop_flag;
+bool stop_flag = false; //程序停止的flag
+bool play_flag = false; //音频播放状态的标志位
+
+int bar_rate = 0;
+
+static void show_bar() //显示进度条，bar_rate为百分比
+{
+    clear_lcd_screen(0x000000, 0, 350, 600, 30, p_lcd);                        // 进度条背景
+    clear_lcd_screen(0x858585, 20, 360, 560, 10, p_lcd);                       // 进度条
+    clear_lcd_screen(0xf38b00, 20, 360, (int)(bar_rate * 5.6), 10, p_lcd);     // 已播放的部分进度条绘橙色
+    clear_lcd_screen(0x000000, 5 + (int)(bar_rate * 5.6), 357, 30, 16, p_lcd); // 滑块
+}
 
 static void show_UI()
 {
-    show_location_bmp("windows_pic/musicUI.bmp", 0, 360, 600, 120, p_lcd);
+    show_location_bmp("windows_pic/musicUI.bmp", 0, 380, 600, 100, p_lcd);
 }
 
 static int send_cmd(int fd_fifo, const char *cmd)
@@ -75,6 +86,7 @@ void Init_Music()
     closedir(dp);
 
     // Display_List(head, true);
+    bar_rate = 0;
 }
 
 void close_music()
@@ -82,8 +94,11 @@ void close_music()
     Release_List(head);
     head = cur_node = NULL;
     if (fd_fifo != -1)
+    {
         close(fd_fifo);
-    stop_flag = false;
+        fd_fifo = -1;
+    }
+    play_flag = false;
 }
 
 void switch_music(P_Node node)
@@ -93,10 +108,15 @@ void switch_music(P_Node node)
         send_cmd(fd_fifo, "quit\n");
     }
 
+    if (node == head)
+    {
+        node = node->next;
+    }
+
     if (node != head)
     {
         char *command = calloc(1, 256);
-        sprintf(command, "mplayer %s -input file=%s &", node->Data, FIFO_PATH);
+        sprintf(command, "mplayer %s -quiet -slave -input file=%s &", node->Data, FIFO_PATH);
         // 直接使用 popen 来播放音视频
         FILE *fp = popen(command, "r");
         if (fp == NULL)
@@ -116,11 +136,25 @@ void switch_music(P_Node node)
             return;
         }
         printf("视频正在播放....\n");
-        stop_flag = false;
+        play_flag = true;
     }
     show_UI(); //显示UI
 
     cur_node = node;
+}
+
+void bar() // 进度条线程
+{
+    while (!stop_flag)
+    {
+        if (play_flag) //音频正在播放则更新进度条信息
+        {
+            // 1.获取进度条百分比
+
+            // 2.根据百分比绘进度条
+            show_bar();
+        }
+    }
 }
 
 void Music()
@@ -128,12 +162,15 @@ void Music()
     //初始化视频信息
     Init_Music();
 
-    switch_music(head);
+    cur_node = head;
 
     int tx = 0, ty = 0;
 
-    bool stop = false;
-    while (!stop)
+    pthread_t bar_thread;
+    pthread_create(&bar_thread, NULL, &bar, NULL);
+
+    stop_flag = false;
+    while (!stop_flag)
     {
         int slide = get_ts(&tx, &ty); //获取触摸屏的坐标
         switch (slide)
@@ -142,7 +179,7 @@ void Music()
         {
             if (tx > 700 && ty < 100)
             {
-                stop = true; //退出
+                stop_flag = true; //退出
                 break;
             }
             else
@@ -151,37 +188,31 @@ void Music()
                 if (300 < tx & tx < 500 && ty > 300)
                 {
                     send_cmd(fd_fifo, "pause\n");
-                    stop_flag = !stop_flag;
+                    play_flag = !play_flag;
                 }
 
-                if (tx < 100 && tx > 0) //切换下一个视频
+                if (tx < 100 && tx > 0) //切换下一首音乐
                 {
                     switch_music(cur_node->prev);
                 }
-                else if (tx > 700 && tx < 800) //切换上一个视频
+                else if (tx > 700 && tx < 800) //切换上一首音乐
                 {
                     switch_music(cur_node->next);
                 }
             }
         }
         break;
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3: //左滑
-        {
-            // switch_music(cur_node->prev);
-        }
-        break;
-
-        case 4: //右滑
-        {
-            // switch_music(cur_node->next);
-        }
-        break;
+            // case 1: //下滑
+            //     break;
+            // case 2: //上滑
+            //     break;
+            // case 3: //左滑
+            //     break;
+            // case 4: //右滑
+            //     break;
         }
     }
+    pthread_join(bar_thread, NULL);
 
     close_music();
 }

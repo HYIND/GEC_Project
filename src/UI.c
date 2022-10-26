@@ -11,20 +11,6 @@ void show_mainUI()
     show_location_bmp("windows_pic/camera.bmp", 50, 290, 100, 100, p_lcd);
 }
 
-void show_musicUI()
-{
-    show_1152000bmp("windows_pic/main.bmp", p_lcd);
-}
-
-void show_gameoverUI()
-{
-    show_location_bmp("windows_pic/gameover.bmp", 280, 200, 240, 80, p_lcd);
-    show_location_bmp("windows_pic/restartgame.bmp", 240, 320, 100, 43, p_lcd);
-    show_location_bmp("windows_pic/gameover.bmp", 205, 200, 240, 80, p_lcd);
-    show_location_bmp("windows_pic/restart.bmp", 240, 320, 100, 43, p_lcd);
-    show_location_bmp("windows_pic/exit.bmp", 380, 320, 100, 43, p_lcd);
-}
-
 void show_cameraUI()
 {
 
@@ -48,4 +34,13 @@ void show_musicUI()
 void show_videoUI()
 {
     show_location_bmp("windows_pic/video.bmp", 0, 400, 800, 80, p_lcd); // 视频界面控制台
+}
+
+void show_gameoverUI()
+{
+    show_location_bmp("windows_pic/gameover.bmp", 280, 200, 240, 80, p_lcd);
+    show_location_bmp("windows_pic/restartgame.bmp", 240, 320, 100, 43, p_lcd);
+    show_location_bmp("windows_pic/gameover.bmp", 205, 200, 240, 80, p_lcd);
+    show_location_bmp("windows_pic/restart.bmp", 240, 320, 100, 43, p_lcd);
+    show_location_bmp("windows_pic/exit.bmp", 380, 320, 100, 43, p_lcd);
 }
