@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include "show_bmp.h"
 
-
 int fd_lcd = -1;
 unsigned int *p_lcd = NULL;
 
@@ -25,7 +24,7 @@ void Init_lcd()
     }
 
     p_lcd = mmap(NULL, 800 * 480 * 8, PROT_READ | PROT_WRITE,
-                  MAP_SHARED, fd_lcd, 0);
+                 MAP_SHARED, fd_lcd, 0);
     if (p_lcd == NULL)
     {
         perror("mmap error");
@@ -36,7 +35,7 @@ void Init_lcd()
 void Init_touch()
 {
     // open event0
-    fd_ts = open("/dev/input/event0", O_RDONLY);
+    fd_ts = open("/dev/input/event0", O_RDWR | O_APPEND);
     if (fd_ts == -1)
     {
         printf("打开触摸屏失败！\n");

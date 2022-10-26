@@ -3,10 +3,11 @@
 #include "font.h"
 #include <pthread.h>
 #include <memory.h>
+#include <time.h>
 
 #define RADUIS 18
 #define HALF_RECT_WIDTH 60
-#define HALF_RECT_HEIGHT 8
+#define HALF_RECT_HEIGHT 9
 
 Ball ball;
 Rect rect;
@@ -170,7 +171,7 @@ bool collision()
             abs(rect.y - rect.height / 2 - ball.x) > abs(rect.y + rect.height / 2 - ball.x) ? rect.y - rect.height / 2
                                                                                             : rect.y + rect.height / 2;
 
-        if (distance_square(vertex_x, vertex_y, ball.x, ball.y) > ball.radius * ball.radius)
+        if (distance_square(vertex_x, vertex_y, ball.x, ball.y) < ball.radius * ball.radius)
         {
             flag = true;
         }
@@ -187,7 +188,7 @@ bool collision()
         {
             ball.y = rect.y + rect.height / 2 + ball.radius;
         }
-        
+
         ball.y_speed = (-ball.y_speed);
         add_points(add_count);
         add_count++;
@@ -236,7 +237,7 @@ void move_ball()
 
     if (collision())
     {
-        ball.y_speed += 2;
+        ball.y_speed += 1 + rand() % 2;
     }
 
     if (ball.x - ball.radius < 0)
@@ -363,14 +364,16 @@ void show_end()
 
 void Init_Game()
 {
+    srand((unsigned)time(NULL));
+
     ball.x = 200;
     ball.y = 100;
     ball.radius = RADUIS;
-    ball.x_speed = 5;
-    ball.y_speed = 3;
+    ball.x_speed = 4 + rand() % 4;
+    ball.y_speed = 4 + rand() % 4;
 
     rect.x = 400;
-    rect.y = 420;
+    rect.y = 430;
     rect.width = HALF_RECT_WIDTH * 2;
     rect.height = HALF_RECT_HEIGHT * 2;
     rect.speed = 5;
@@ -401,7 +404,7 @@ bool Game()
             break;
         draw();
 
-        usleep(30000);
+        usleep(25000);
         // draw_round(&ball);
         // draw_rect(&rect);
         move_ball();

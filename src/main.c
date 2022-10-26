@@ -3,6 +3,8 @@
 #include "game.h"
 #include "album.h"
 #include "camera.h"
+#include "music.h"
+#include "video.h"
 
 void main_process()
 {
@@ -22,13 +24,15 @@ void main_process()
             if (P_I.x > 250 && P_I.x < 350 && P_I.y > 90 && P_I.y < 190) // mp3按钮
             {
                 // loadig();
-                // Music();
-                // show_mainUI();
+                Music();
+                show_mainUI();
             }
 
-            if (P_I.x > 450 && P_I.x < 550 && P_I.y > 190 && P_I.y < 190) // mp4按钮
+            if (P_I.x > 450 && P_I.x < 550 && P_I.y > 90 && P_I.y < 190) // mp4按钮
             {
                 // loadig();
+                Video();
+                show_mainUI();
             }
 
             if (P_I.x > 650 && P_I.x < 750 && P_I.y > 90 && P_I.y < 190) //游戏按钮

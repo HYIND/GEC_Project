@@ -62,6 +62,21 @@ int Display_List(P_Node head, bool flag)
     return 0;
 }
 
+bool Release_List(P_Node head)
+{
+    P_Node node = head->next;
+    while (node != head)
+    {
+        P_Node temp = node->next;
+        if (node->Data)
+            free(node->Data);
+        free(node);
+        node = temp;
+    }
+    free(head);
+    return true;
+}
+
 //查找
 /* P_Node Find_List(P_Node head, data_type num)
 {

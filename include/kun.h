@@ -1,5 +1,5 @@
-#ifndef _KUN_H_
-#define _KUN_H_
+#ifndef __KUN_H__
+#define __KUN_H__
 
 
 void show_kun1();

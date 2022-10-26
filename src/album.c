@@ -10,8 +10,9 @@
 P_Node cur_node; //当前正在访问的图片所在链表节点
 P_Node head;
 
-void show_UI()
+static void show_UI()
 {
+
 }
 
 void Init_Album()
@@ -36,7 +37,7 @@ void Init_Album()
         //成功读取到
         // printf("%s\n", temp->d_name);
 
-        if (strstr(temp->d_name, ".bmp")) //判断是否为.bmp文件
+        if (strstr(temp->d_name, ".bmp") || strstr(temp->d_name, ".jpg")) //判断是否为.bmp/.jpg文件
         {
             char *path = calloc(1, strlen(photodir) + strlen(temp->d_name) + 1);
             sprintf(path, "%s/%s", photodir, temp->d_name);
@@ -47,15 +48,17 @@ void Init_Album()
     // 3.关闭目录
     closedir(dp);
 
-    Display_List(head, true);
+    // Display_List(head, true);
 }
 
 void switch_photo(P_Node node)
 {
-    show_1152000bmp("background.bmp",p_lcd); //开发板下，可执行文件目录下存放的背景图（可以使用绝对路径！）
+     clear_lcd_screen(0XFFFFFF, 0, 0, 800, 480, p_lcd);
+    // show_1152000bmp("windows_pic/albumbkg.bmp", p_lcd); //开发板下，可执行文件目录下存放的背景图（可以使用绝对路径！）
     if (node != head)
     {
-        show_1152000bmp(head->Data, p_lcd); //显示BMP图片
+        printf("%s\n", node->Data);
+        show_1152000bmp(node->Data, p_lcd); //显示BMP图片
     }
     show_UI(); //显示UI
 

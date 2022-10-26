@@ -1,5 +1,5 @@
-#ifndef _TOUCH_H
-#define _TOUCH_H
+#ifndef __TOUCH_H__
+#define __TOUCH_H__
 
 #include "fd.h"
 #include <linux/input.h>

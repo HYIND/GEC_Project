@@ -23,3 +23,5 @@ P_Node New_Node(data_type path);
 int List_Add_To(P_Node head, data_type path, P_Node new);
 
 int Display_List(P_Node head, bool flag);
+
+bool Release_List(P_Node head);
