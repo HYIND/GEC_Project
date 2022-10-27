@@ -27,6 +27,7 @@ void show_cameraUI()
     show_location_bmp("windows_pic/exitcamera.bmp", 675, 10, 100, 100, p_lcd);
     show_location_bmp("windows_pic/takephoto.bmp", 675, 190, 100, 100, p_lcd);
     show_location_bmp("windows_pic/photo2.bmp", 675, 370, 100, 100, p_lcd);
+
 }
 
 void show_musicUI()
@@ -42,6 +43,7 @@ void show_videoUI()
 {
     clear_lcd_screen(0x000000, 0, 0, 800, 480, p_lcd);
     show_location_bmp("windows_pic/musicUI.bmp", 150, 380, 500, 100, p_lcd); // 视频界面控制台
+    
 }
 
 void show_gameoverUI()
