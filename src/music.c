@@ -5,11 +5,11 @@
 P_Node cur_node; //当前正在播放的音频所在链表节点
 P_Node head;
 
-int fd_fifo;
-bool stop_flag = false; //程序停止的flag
-bool play_flag = false; //音频播放状态的标志位
+static int fd_fifo;
+static bool stop_flag = false; //程序停止的flag
+static bool play_flag = false; //音频播放状态的标志位
 
-int bar_rate = 0;
+static int bar_rate = 0;
 
 static void show_bar() //显示进度条，bar_rate为百分比
 {
@@ -143,7 +143,7 @@ void switch_music(P_Node node)
     cur_node = node;
 }
 
-void bar() // 进度条线程
+static void bar() // 进度条线程
 {
     while (!stop_flag)
     {
@@ -154,6 +154,7 @@ void bar() // 进度条线程
             // 2.根据百分比绘进度条
             show_bar();
         }
+        usleep(500000);
     }
 }
 
@@ -161,8 +162,9 @@ void Music()
 {
     //初始化视频信息
     Init_Music();
-
     cur_node = head;
+    
+    show_musicUI();
 
     int tx = 0, ty = 0;
 

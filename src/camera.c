@@ -52,6 +52,11 @@ void *real_time_video()
     linux_v4l2_yuyv_quit();
 }
 
+// 相机相册
+void camera_album()
+{
+}
+
 void Camera()
 {
     //创建一条线程实时监控
@@ -60,41 +65,34 @@ void Camera()
     pthread_create(&pid, NULL, &real_time_video, NULL);
 
     show_cameraUI();
-    
+
     int x, y;
     while (1)
     {
         get_ts(&x, &y);
-        if (x > 700 && y < 96)
+        if (x > 670 && y < 150)
         {
             video_show_flag = 0;
             break; //退出
         }
-        else if (x > 700 && y < 192)
+        else if (x > 670 && y > 165 && y < 315)
         {
-            take_photo_flag = 1; //抓拍
-            printf("抓拍\n");
+            //抓拍
+            take_photo_flag = 1;
+            printf("拍照\n");
         }
-        else if (x > 700 && y < 288)
+        else if (x > 670 && y > 330)
         {
+            // 相册
             video_show_flag = 0;
             pthread_join(pid, NULL);
-            lcd_draw_jpg(0, 0, "photo/photo.jpg", NULL, NULL, 0);
-        }
-        else if (x > 700 && y < 384)
-        {
-            if (video_show_flag == 1)
-                continue;
+            camera_album();
+            show_cameraUI();
             video_show_flag = 1;
-            printf("打开摄像头\n");
             pthread_create(&pid, NULL, &real_time_video, NULL);
         }
-        else if (x > 700 && y < 480)
-        {
-            printf("关闭摄像头\n");
-            video_show_flag = 0;
-        }
     }
+    printf("关闭摄像头\n");
     video_show_flag = 0;
     pthread_join(pid, NULL);
 }

@@ -5,11 +5,11 @@
 P_Node cur_node; //当前正在观看的视频所在链表节点
 P_Node head;
 
-int fd_fifo;
-bool stop_flag = false;
-bool play_flag = false;
+static int fd_fifo;
+static bool stop_flag = false;
+static bool play_flag = false;
 
-int bar_rate = 0;
+static int bar_rate = 0;
 
 static void show_bar() //显示进度条，bar_rate为百分比
 {
@@ -145,7 +145,7 @@ void switch_video(P_Node node)
     cur_node = node;
 }
 
-void bar() // 进度条线程
+static void bar() // 进度条线程
 {
     while (!stop_flag)
     {
@@ -156,6 +156,7 @@ void bar() // 进度条线程
             // 2.根据百分比绘进度条
             show_bar();
         }
+        usleep(500000);
     }
 }
 
