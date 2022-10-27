@@ -12,6 +12,8 @@ P_Node head;
 
 static void show_UI()
 {
+    
+
 }
 
 void Init_Album()
