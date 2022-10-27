@@ -10,14 +10,10 @@
 P_Node cur_node; //当前正在访问的图片所在链表节点
 P_Node head;
 
-static void show_UI()
+static void show_Bkg()
 {
-    show_location_bmp("windows_pic/right.bmp", 700, 170, 80, 140, p_lcd);
-    show_location_bmp("windows_pic/left.bmp", 20, 170, 80, 140, p_lcd);
-    show_location_bmp("windows_pic/slide.bmp", 330, 430, 50, 50, p_lcd);
-    show_location_bmp("windows_pic/delete.bmp", 420, 430, 50, 50, p_lcd);
+    show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd); //背景
 }
-
 
 void Init_Album()
 {
@@ -57,7 +53,7 @@ void Init_Album()
 
 void switch_photo(P_Node node)
 {
-    show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd); //背景
+    show_Bkg();
     if (node != head)
     {
         printf("%s\n", node->Data);
@@ -88,9 +84,6 @@ void delete_photo(P_Node node)
     system(command);
     Delete_Node(node);
 }
-
-
-
 
 void Album()
 {
