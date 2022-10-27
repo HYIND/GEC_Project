@@ -10,7 +10,7 @@ void show_mainUI()
     show_location_bmp("windows_pic/mp3.bmp", 250, 90, 100, 100, p_lcd);
     show_location_bmp("windows_pic/mp4.bmp", 450, 90, 100, 100, p_lcd);
     show_location_bmp("windows_pic/game.bmp", 650, 90, 100, 100, p_lcd);
-    show_location_bmp("windows_pic/camera.bmp", 50, 290, 100, 100, p_lcd);
+    show_location_bmp("windows_pic/camera.bmp", 50, 290, 52, 52, p_lcd);
 }
 
 void show_albumUI()
@@ -20,7 +20,7 @@ void show_albumUI()
     show_location_bmp("windows_pic/left.bmp", 0, 205, 40, 70, p_lcd);
     show_location_bmp("windows_pic/slide.bmp", 330, 420, 52, 52, p_lcd);
     show_location_bmp("windows_pic/delete.bmp", 418, 420, 52, 52, p_lcd);
-    show_location_bmp("windows_pic/exitphoto.bmp", 700, 0, 100, 100, p_lcd);
+    show_location_bmp("windows_pic/exitphoto.bmp", 700, 0, 52 , 52, p_lcd);
 }
 
 void show_cameraUI()
@@ -37,6 +37,8 @@ void show_musicUI()
     show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd);                     // 音乐界面背景
     show_location_bmp("windows_pic/musicUI.bmp", 0, 380, 500, 100, p_lcd); // 音乐界面控制台
     show_location_bmp("windows_pic/bigmusic.bmp", 125, 50, 252, 252, p_lcd);
+    show_location_bmp("windows_pic/exitmusic.bmp", 700, 0, 52, 52, p_lcd);
+
 }
 
 void show_videoUI()
