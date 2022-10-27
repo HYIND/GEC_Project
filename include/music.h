@@ -11,6 +11,7 @@
 #include "show_bmp.h"
 #include <pthread.h>
 #include "UI.h"
+#include "font.h"
 
 void Music();
 

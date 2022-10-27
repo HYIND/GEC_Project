@@ -5,6 +5,9 @@
 P_Node cur_node; //当前正在播放的音频所在链表节点
 P_Node head;
 
+P_Node cur_list_node_start;
+P_Node cur_list_node_end;
+
 static int fd_fifo;
 static bool stop_flag = false; //程序停止的flag
 static bool play_flag = false; //音频播放状态的标志位
@@ -137,7 +140,6 @@ void switch_music(P_Node node, bool flag) // flag 向前/向后标志
         printf("视频正在播放....\n");
         play_flag = true;
     }
-    show_musicUI(); //显示UI
 
     cur_node = node;
 }
@@ -157,14 +159,73 @@ static void bar() // 进度条线程
     }
 }
 
+void show_list_node(int count, P_Node node)
+{
+    //打开字体
+    font *points_font = fontLoad("./softbrush.ttf");
+    //字体大小的设置
+    fontSetSize(points_font, 15);
+
+    bitmap *bm = createBitmapWithInit(290, 70, 4, getColor(0, 0, 0, 0));
+
+    fontPrint(points_font, bm, 10, 30, node->Data, getColor(0, 255, 255, 255), 290);
+
+    //把字体框输出到LCD屏幕上
+    show_font_to_lcd(p_lcd, 510, 70 + 70 * count, bm);
+
+    //关闭画板
+    destroyBitmap(bm);
+
+    //关闭字体
+    fontUnload(points_font);
+}
+
+void show_music_list()
+{
+    clear_lcd_screen(0x000000, 500, 70, 200, 350, p_lcd);
+    cur_list_node_start = cur_list_node_end->next;
+    if (cur_list_node_start == head)
+        cur_list_node_start = cur_list_node_start->next;
+
+    P_Node cur_node = cur_list_node_start;
+
+    int count = 0;
+    while (count < 5 && cur_node != head)
+    {
+        show_list_node(count, cur_node);
+        cur_node = cur_node->next;
+        count++;
+    }
+    cur_list_node_end = cur_node->prev;
+}
+
+void switch_next_page()
+{
+    show_music_list();
+}
+
+void list_play(int count)
+{
+    P_Node cur_node = cur_list_node_start;
+    while (count)
+    {
+        cur_node = cur_node->next;
+        if (cur_node == head)
+            return;
+        count--;
+    }
+    switch_music(cur_node, true);
+}
 
 void Music()
 {
     //初始化视频信息
     Init_Music();
     cur_node = head;
-
+    cur_list_node_start = head->next;
+    cur_list_node_end = head;
     show_musicUI();
+    show_music_list();
 
     int tx = 0, ty = 0;
 
@@ -227,6 +288,34 @@ void Music()
                 {
                     printf("%s\n", "voice++");
                     send_cmd(fd_fifo, "volume +2\n");
+                }
+                // else if (tx > 500 && tx < 600 && ty > 440)
+                // {
+                //     switch_lsat_page();
+                // }
+                else if (tx > 500 && ty < 140)
+                {
+                    list_play(0);
+                }
+                else if (tx > 500 && ty < 210)
+                {
+                    list_play(1);
+                }
+                else if (tx > 500 && ty < 280)
+                {
+                    list_play(2);
+                }
+                else if (tx > 500 && ty < 350)
+                {
+                    list_play(3);
+                }
+                else if (tx > 500 && ty < 420)
+                {
+                    list_play(4);
+                }
+                else if (tx > 700 && ty > 350)
+                {
+                    switch_next_page();
                 }
             }
         }

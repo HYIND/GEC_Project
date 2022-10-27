@@ -7,7 +7,7 @@
 
 #define RADUIS 18
 #define HALF_RECT_WIDTH 60
-#define HALF_RECT_HEIGHT 9
+#define HALF_RECT_HEIGHT 6
 
 Ball ball;
 Rect rect;
@@ -16,11 +16,6 @@ bool stop_flag = false;
 font *points_font;
 char points_buf[6] = "00000";
 int add_count = 1;
-
-bool AD()
-{
-    return false;
-}
 
 void draw_points()
 {
@@ -101,15 +96,15 @@ void draw_rect()
     right = lastdraw_rect_x + rect.width / 2;
     top = lastdraw_rect_y - rect.height / 2;
     bottom = lastdraw_rect_y + rect.height / 2;
-    for (int i = left; i < right; i++)
-    {
-        for (int j = top; j < bottom; j++)
-        {
-            *(p_lcd + i + j * 800) = 0x0000FF;
-        }
-    }
+    // for (int i = left; i < right; i++)
+    // {
+    //     for (int j = top; j < bottom; j++)
+    //     {
+    //         *(p_lcd + i + j * 800) = 0x0000FF;
+    //     }
+    // }
 
-    // show_location_bmp("basketball_kun.bmp", left, top, rect.width, rect.height, p_lcd);
+    show_location_bmp("windows_pic/wood.bmp", left, top, rect.width, rect.height, p_lcd);
 }
 
 void draw()
@@ -257,15 +252,13 @@ void move_ball()
     }
     if (ball.y + ball.radius > 480)
     {
-        if (AD())
-        {
-            ball.y = 400 - ball.radius;
-            ball.y_speed = (-ball.y_speed);
-        }
-        else
-        {
+        // if (AD())
+        // {
+        //     ball.y = 400 - ball.radius;
+        //     ball.y_speed = (-ball.y_speed);
+        // }
+        // else
             stop_flag = true;
-        }
     }
 }
 
@@ -336,7 +329,7 @@ void show_begin()
     destroyBitmap(bm);
 
     bm = createBitmapWithInit(120, 70, 4, getColor(0, 0, 0, 0));
-    char buf2[] = "暂停";
+    char buf2[] = "选项";
     fontPrint(points_font, bm, 20, 0, buf2, getColor(0, 255, 255, 255), 120);
     show_font_to_lcd(p_lcd, 660, 380, bm);
     destroyBitmap(bm);
