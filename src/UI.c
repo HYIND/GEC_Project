@@ -10,7 +10,7 @@ void show_mainUI()
     show_location_bmp("windows_pic/mp3.bmp", 250, 90, 100, 100, p_lcd);
     show_location_bmp("windows_pic/mp4.bmp", 450, 90, 100, 100, p_lcd);
     show_location_bmp("windows_pic/game.bmp", 650, 90, 100, 100, p_lcd);
-    show_location_bmp("windows_pic/camera.bmp", 50, 290, 52, 52, p_lcd);
+    show_location_bmp("windows_pic/camera.bmp", 50, 290, 100, 100, p_lcd);
 }
 
 void show_albumUI()
@@ -30,6 +30,7 @@ void show_cameraUI()
     show_location_bmp("windows_pic/exitcamera.bmp", 675, 10, 100, 100, p_lcd);
     show_location_bmp("windows_pic/takephoto.bmp", 675, 190, 100, 100, p_lcd);
     show_location_bmp("windows_pic/photo2.bmp", 675, 370, 100, 100, p_lcd);
+
 }
 
 void show_musicUI()
@@ -45,6 +46,7 @@ void show_videoUI()
 {
     clear_lcd_screen(COLOR_BLACK, 0, 0, 800, 480, p_lcd);
     show_location_bmp("windows_pic/musicUI.bmp", 150, 380, 500, 100, p_lcd); // 视频界面控制台
+
 }
 
 void show_gameoverUI()
