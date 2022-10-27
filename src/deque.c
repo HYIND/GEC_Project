@@ -123,3 +123,20 @@ bool Release_List(P_Node head)
 
     return del;
 } */
+
+bool Delete_Node(P_Node node)
+{
+    if (!node)
+        return false;
+
+    // 在链表中移除该节点
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+
+    // 释放节点内存
+    if (node->Data)
+        free(node->Data);
+    free(node);
+    
+    return true;
+}

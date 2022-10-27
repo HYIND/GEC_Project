@@ -77,9 +77,20 @@ void switch_photo(P_Node node)
     cur_node = node;
 }
 
-delete_photo(){
-    
+void delete_photo(P_Node node)
+{
+    if (node != head)
+        return;
+
+    switch_photo(node->next);
+    char command[256] = {0};
+    sprintf(command, "rm %s", node->Data);
+    system(command);
+    Delete_Node(node);
 }
+
+
+
 
 void Album()
 {
@@ -114,6 +125,14 @@ void Album()
                 else if (tx > 700 && tx < 800) //右翻
                 {
                     switch_photo(cur_node->next);
+                }
+                else if (tx > 300 && tx < 400 && ty > 380) //从该图片开始播放幻灯片
+                {
+                    switch_photo(cur_node->next);
+                }
+                else if (tx > 400 && tx < 500 && ty > 380) //删除图片
+                {
+                    delete_photo(cur_node);
                 }
             }
         }
