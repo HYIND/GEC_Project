@@ -16,6 +16,7 @@ static void show_UI()
 
 }
 
+
 void Init_Album()
 {
     //读取目录下的图片，生成双向链表
@@ -54,8 +55,7 @@ void Init_Album()
 
 void switch_photo(P_Node node)
 {
-    clear_lcd_screen(0XFFFFFF, 0, 0, 800, 480, p_lcd);
-    // show_1152000bmp("windows_pic/albumbkg.bmp", p_lcd); //开发板下，可执行文件目录下存放的背景图（可以使用绝对路径！）
+    show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd); //背景
     if (node != head)
     {
         printf("%s\n", node->Data);
@@ -69,9 +69,14 @@ void switch_photo(P_Node node)
             lcd_draw_jpg(0, 0, node->Data, NULL, NULL, 0); //显示JPG图片
         }
     }
-    show_UI(); //显示UI
+
+    show_albumUI(); //显示UI
 
     cur_node = node;
+}
+
+delete_photo(){
+    
 }
 
 void Album()

@@ -10,6 +10,7 @@
 #include "deque.h"
 #include "show_bmp.h"
 #include <pthread.h>
+#include "UI.h"
 
 void Music();
 

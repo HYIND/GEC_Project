@@ -86,7 +86,7 @@ void Init_Video()
     // 3.关闭目录
     closedir(dp);
 
-    // Display_List(head, true);
+    Display_List(head, true);
 
     bar_rate = 0;
 }
@@ -97,13 +97,14 @@ void close_video()
     head = cur_node = NULL;
     if (fd_fifo != -1)
     {
+        send_cmd(fd_fifo, "quit\n");
         close(fd_fifo);
         fd_fifo = -1;
     }
     play_flag = false;
 }
 
-void switch_video(P_Node node)
+void switch_video(P_Node node, bool flag)
 {
     if (fd_fifo != -1)
     {
@@ -112,7 +113,10 @@ void switch_video(P_Node node)
 
     if (node == head)
     {
-        node = node->next;
+        if (flag)
+            node = node->next;
+        else
+            node = node->prev;
     }
 
     if (node != head)
@@ -140,7 +144,7 @@ void switch_video(P_Node node)
         printf("视频正在播放....\n");
         play_flag = true;
     }
-    show_UI(); //显示UI
+    show_videoUI(); //显示UI
 
     cur_node = node;
 }
@@ -164,13 +168,14 @@ void Video()
 {
     //初始化视频信息
     Init_Video();
-
     cur_node = head;
+
+    show_videoUI();
 
     int tx = 0, ty = 0;
 
-    pthread_t bar_thread;
-    pthread_create(&bar_thread, NULL, &bar, NULL);
+    // pthread_t bar_thread;
+    // pthread_create(&bar_thread, NULL, &bar, NULL);
 
     stop_flag = false;
     while (!stop_flag)
@@ -187,20 +192,47 @@ void Video()
             }
             else
             {
-                // 停止/播放
-                if (300 < tx & tx < 500 && ty > 300)
+                // 音量-
+                if (tx < 230 && ty > 380)
                 {
-                    send_cmd(fd_fifo, "pause\n");
-                    play_flag = !play_flag;
+                    printf("%s\n", "voice--");
+                    send_cmd(fd_fifo, "volume -2\n");
                 }
-
-                if (tx < 100 && tx > 0) //切换下一个视频
+                else if (tx < 310 && ty > 380) //切换上一个视频
                 {
-                    switch_video(cur_node->prev);
+                    printf("%s\n", "switch to last video");
+                    switch_video(cur_node->prev, false);
                 }
-                else if (tx > 700 && tx < 800) //切换上一个视频
+                // 播放
+                else if (tx < 400 && ty > 380)
                 {
-                    switch_video(cur_node->next);
+                    printf("%s\n", "play");
+                    if (play_flag == false)
+                    {
+                        send_cmd(fd_fifo, "pause\n");
+                        play_flag = !play_flag;
+                    }
+                }
+                // 停止
+                else if (tx < 480 && ty > 380)
+                {
+                    printf("%s\n", "pause");
+                    if (play_flag == true)
+                    {
+                        send_cmd(fd_fifo, "pause\n");
+                        play_flag = !play_flag;
+                    }
+                }
+                else if (tx < 560 && tx > 380) //切换下一个视频
+                {
+                    printf("%s\n", "switch to next video");
+                    switch_video(cur_node->next, true);
+                }
+                // 音量+
+                else if (tx < 640 && ty > 380)
+                {
+                    printf("%s\n", "voice++");
+                    send_cmd(fd_fifo, "volume +2\n");
                 }
             }
         }
@@ -215,7 +247,7 @@ void Video()
             //     break;
         }
     }
-    pthread_join(bar_thread, NULL);
+    // pthread_join(bar_thread, NULL);
 
     close_video();
 }
