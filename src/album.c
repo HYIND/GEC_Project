@@ -10,13 +10,7 @@
 P_Node cur_node; //当前正在访问的图片所在链表节点
 P_Node head;
 
-static void show_UI()
-{
-    show_location_bmp("windows_pic/right.bmp", 700, 170, 80, 140, p_lcd);
-    show_location_bmp("windows_pic/left.bmp", 20, 170, 80, 140, p_lcd);
-    show_location_bmp("windows_pic/slide.bmp", 330, 430, 50, 50, p_lcd);
-    show_location_bmp("windows_pic/delete.bmp", 420, 430, 50, 50, p_lcd);
-}
+static void show_UI();
 
 
 void Init_Album()

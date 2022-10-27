@@ -7,6 +7,5 @@
 #include "UI.h"
 
 void Album();
-static void show_UI();
 
 #endif
