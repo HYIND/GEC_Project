@@ -193,12 +193,12 @@ void Video()
             else
             {
                 // 音量-
-                if (tx < 230 && ty > 380)
+                if (tx < 240 && ty > 380)
                 {
                     printf("%s\n", "voice--");
                     send_cmd(fd_fifo, "volume -2\n");
                 }
-                else if (tx < 310 && ty > 380) //切换上一个视频
+                else if (tx < 315 && ty > 380) //切换上一个视频
                 {
                     printf("%s\n", "switch to last video");
                     switch_video(cur_node->prev, false);
