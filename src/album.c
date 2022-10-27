@@ -86,8 +86,6 @@ void switch_photo(P_Node node, bool flag) // flag 向前/向后标志
 
 void switch_slide_photo(P_Node node)
 {
-    show_Bkg();
-
     if (node == head)
     {
         node = node->next;
@@ -141,6 +139,7 @@ void slide_photo(P_Node node)
         cur_slide = cur_slide->next;
         sleep(2);
     } while (slide_flag && cur_slide != node);
+    switch_photo(node, true);
     printf("slide exit!\n");
 }
 
@@ -166,6 +165,9 @@ void Album()
     show_Bkg();
     show_albumUI();
 
+    pthread_t slide_thread;
+
+    slide_flag = false;
     int tx = 0, ty = 0;
 
     bool stop = false;
@@ -199,7 +201,8 @@ void Album()
                 }
                 else if (tx > 330 && tx < 390 && ty > 420) //从该图片开始播放幻灯片
                 {
-                    slide_photo(cur_node); //幻灯片
+                    slide_flag = true;
+                    pthread_create(&slide_thread, NULL, &slide_photo, cur_node); //幻灯片
                 }
                 else if (tx > 410 && tx < 470 && ty > 420) //删除图片
                 {

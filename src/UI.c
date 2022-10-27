@@ -1,7 +1,7 @@
 #include "UI.h"
 #include "fd.h"
 
-#define COLOR_WHITE 0x000000
+#define COLOR_BLACK 0x000000
 
 void show_mainUI()
 {
@@ -15,18 +15,18 @@ void show_mainUI()
 
 void show_albumUI()
 {
-    clear_lcd_screen(COLOR_WHITE, 320, 410, 160, 70, p_lcd);
+    clear_lcd_screen(COLOR_BLACK, 320, 410, 160, 70, p_lcd);
     show_location_bmp("windows_pic/right.bmp", 760, 205, 40, 70, p_lcd);
     show_location_bmp("windows_pic/left.bmp", 0, 205, 40, 70, p_lcd);
     show_location_bmp("windows_pic/slide.bmp", 330, 420, 52, 52, p_lcd);
     show_location_bmp("windows_pic/delete.bmp", 418, 420, 52, 52, p_lcd);
-    show_location_bmp("windows_pic/exitphoto.bmp", 700, 0, 52 , 52, p_lcd);
+    show_location_bmp("windows_pic/exitphoto.bmp", 748, 0, 52 , 52, p_lcd);
 }
 
 void show_cameraUI()
 {
 
-    clear_lcd_screen(COLOR_WHITE, 0, 0, 800, 480, p_lcd);
+    clear_lcd_screen(COLOR_BLACK, 0, 0, 800, 480, p_lcd);
     show_location_bmp("windows_pic/exitcamera.bmp", 675, 10, 100, 100, p_lcd);
     show_location_bmp("windows_pic/takephoto.bmp", 675, 190, 100, 100, p_lcd);
     show_location_bmp("windows_pic/photo2.bmp", 675, 370, 100, 100, p_lcd);
@@ -43,7 +43,7 @@ void show_musicUI()
 
 void show_videoUI()
 {
-    clear_lcd_screen(COLOR_WHITE, 0, 0, 800, 480, p_lcd);
+    clear_lcd_screen(COLOR_BLACK, 0, 0, 800, 480, p_lcd);
     show_location_bmp("windows_pic/musicUI.bmp", 150, 380, 500, 100, p_lcd); // 视频界面控制台
 }
 
