@@ -15,6 +15,7 @@ static void show_Bkg()
     show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd); //背景
 }
 
+
 void Init_Album()
 {
     //读取目录下的图片，生成双向链表
