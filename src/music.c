@@ -19,11 +19,6 @@ static void show_bar() //显示进度条，bar_rate为百分比
     clear_lcd_screen(0x000000, 5 + (int)(bar_rate * 4.6), 357, 30, 16, p_lcd); // 滑块
 }
 
-static void show_UI()
-{
-    show_location_bmp("windows_pic/musicUI.bmp", 0, 380, 600, 100, p_lcd);
-}
-
 static int send_cmd(int fd_fifo, const char *cmd)
 {
 
@@ -95,13 +90,14 @@ void close_music()
     head = cur_node = NULL;
     if (fd_fifo != -1)
     {
+        send_cmd(fd_fifo, "quit\n");
         close(fd_fifo);
         fd_fifo = -1;
     }
     play_flag = false;
 }
 
-void switch_music(P_Node node)
+void switch_music(P_Node node, bool flag) // flag 向前/向后标志
 {
     if (fd_fifo != -1)
     {
@@ -110,7 +106,10 @@ void switch_music(P_Node node)
 
     if (node == head)
     {
-        node = node->next;
+        if (flag)
+            node = node->next;
+        else
+            node = node->prev;
     }
 
     if (node != head)
@@ -138,7 +137,7 @@ void switch_music(P_Node node)
         printf("视频正在播放....\n");
         play_flag = true;
     }
-    show_UI(); //显示UI
+    show_musicUI(); //显示UI
 
     cur_node = node;
 }
@@ -163,7 +162,7 @@ void Music()
     //初始化视频信息
     Init_Music();
     cur_node = head;
-    
+
     show_musicUI();
 
     int tx = 0, ty = 0;
@@ -186,32 +185,51 @@ void Music()
             }
             else
             {
-                // 停止/播放
-                if (300 < tx & tx < 500 && ty > 300)
+                // 音量-
+                if (tx < 80 && ty > 380)
                 {
-                    send_cmd(fd_fifo, "pause\n");
-                    play_flag = !play_flag;
+                    printf("%s\n", "voice--");
+                    send_cmd(fd_fifo, "volume -2\n");
                 }
-
-                if (tx < 100 && tx > 0) //切换下一首音乐
+                else if (tx < 160 && ty > 380) //切换上一首音乐
                 {
-                    switch_music(cur_node->prev);
+                    printf("%s\n", "switch to last music");
+                    switch_music(cur_node->prev, false);
                 }
-                else if (tx > 700 && tx < 800) //切换上一首音乐
+                // 播放
+                else if (tx < 250 && ty > 380)
                 {
-                    switch_music(cur_node->next);
+                    printf("%s\n", "play");
+                    if (play_flag == false)
+                    {
+                        send_cmd(fd_fifo, "pause\n");
+                        play_flag = !play_flag;
+                    }
+                }
+                // 停止
+                else if (tx < 330 && ty > 380)
+                {
+                    printf("%s\n", "pause");
+                    if (play_flag == true)
+                    {
+                        send_cmd(fd_fifo, "pause\n");
+                        play_flag = !play_flag;
+                    }
+                }
+                else if (tx < 410 && tx > 380) //切换下一首音乐
+                {
+                    printf("%s\n", "switch to next music");
+                    switch_music(cur_node->next, true);
+                }
+                // 音量+
+                else if (tx < 490 && ty > 380)
+                {
+                    printf("%s\n", "voice++");
+                    send_cmd(fd_fifo, "volume +2\n");
                 }
             }
         }
         break;
-            // case 1: //下滑
-            //     break;
-            // case 2: //上滑
-            //     break;
-            // case 3: //左滑
-            //     break;
-            // case 4: //右滑
-            //     break;
         }
     }
     pthread_join(bar_thread, NULL);

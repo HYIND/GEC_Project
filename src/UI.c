@@ -13,7 +13,6 @@ void show_mainUI()
 
 void show_albumUI()
 {
-    show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd);
 }
 
 void show_cameraUI()
@@ -34,7 +33,8 @@ void show_musicUI()
 
 void show_videoUI()
 {
-    // show_location_bmp("windows_pic/video.bmp", 0, 400, 800, 80, p_lcd); // 视频界面控制台
+    clear_lcd_screen(0x000000, 0, 0, 800, 480, p_lcd);
+    show_location_bmp("windows_pic/musicUI.bmp", 150, 380, 500, 100, p_lcd); // 视频界面控制台
 }
 
 void show_gameoverUI()
