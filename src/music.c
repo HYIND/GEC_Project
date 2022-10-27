@@ -187,12 +187,12 @@ void Music()
             else
             {
                 // 音量-
-                if (tx < 80 && ty > 380)
+                if (tx < 90 && ty > 380)
                 {
                     printf("%s\n", "voice--");
                     send_cmd(fd_fifo, "volume -2\n");
                 }
-                else if (tx < 160 && ty > 380) //切换上一首音乐
+                else if (tx < 165 && ty > 380) //切换上一首音乐
                 {
                     printf("%s\n", "switch to last music");
                     switch_music(cur_node->prev, false);
