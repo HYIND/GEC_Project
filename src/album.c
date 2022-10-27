@@ -10,6 +10,13 @@
 P_Node cur_node; //当前正在访问的图片所在链表节点
 P_Node head;
 
+static void show_UI()
+{
+    
+
+}
+
+
 void Init_Album()
 {
     //读取目录下的图片，生成双向链表
