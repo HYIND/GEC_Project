@@ -10,6 +10,7 @@
 #include "show_bmp.h"
 #include "touch.h"
 #include <pthread.h>
+#include "UI.h"
 
 void Video();
 

@@ -157,6 +157,7 @@ static void bar() // 进度条线程
     }
 }
 
+
 void Music()
 {
     //初始化视频信息

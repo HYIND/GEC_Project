@@ -13,10 +13,11 @@ void show_mainUI()
 
 void show_albumUI()
 {
-    show_location_bmp("windows_pic/right.bmp", 700, 170, 80, 140, p_lcd);
-    show_location_bmp("windows_pic/left.bmp", 20, 170, 80, 140, p_lcd);
-    show_location_bmp("windows_pic/slide.bmp", 330, 430, 50, 50, p_lcd);
-    show_location_bmp("windows_pic/delete.bmp", 420, 430, 50, 50, p_lcd);
+    show_location_bmp("windows_pic/right.bmp", 760, 205, 40, 70, p_lcd);
+    show_location_bmp("windows_pic/left.bmp", 0, 205, 40, 70, p_lcd);
+    show_location_bmp("windows_pic/slide.bmp", 330, 420, 52, 52, p_lcd);
+    show_location_bmp("windows_pic/delete.bmp", 418, 420, 52, 52, p_lcd);
+    show_location_bmp("windows_pic/exitphoto.bmp", 700, 0, 100, 100, p_lcd);
 }
 
 void show_cameraUI()

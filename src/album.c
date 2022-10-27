@@ -10,11 +10,12 @@
 P_Node cur_node; //当前正在访问的图片所在链表节点
 P_Node head;
 
+bool slide_flag = false;
+
 static void show_Bkg()
 {
     show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd); //背景
 }
-
 
 void Init_Album()
 {
@@ -74,6 +75,10 @@ void switch_photo(P_Node node)
     cur_node = node;
 }
 
+void slide_photo(P_Node node)
+{
+}
+
 void delete_photo(P_Node node)
 {
     if (node != head)
@@ -120,11 +125,11 @@ void Album()
                 {
                     switch_photo(cur_node->next);
                 }
-                else if (tx > 300 && tx < 400 && ty > 380) //从该图片开始播放幻灯片
+                else if (tx > 330 && tx < 390 && ty > 420) //从该图片开始播放幻灯片
                 {
-                    switch_photo(cur_node->next);
+                    slide_photo(cur_node); //幻灯片
                 }
-                else if (tx > 400 && tx < 500 && ty > 380) //删除图片
+                else if (tx > 410 && tx < 470 && ty > 420) //删除图片
                 {
                     delete_photo(cur_node);
                 }
