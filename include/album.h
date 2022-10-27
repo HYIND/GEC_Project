@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "UI.h"
+#include <pthread.h>
 
 void Album();
 

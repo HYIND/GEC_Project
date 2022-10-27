@@ -53,9 +53,18 @@ void Init_Album()
     // Display_List(head, true);
 }
 
-void switch_photo(P_Node node)
+void switch_photo(P_Node node, bool flag) // flag 向前/向后标志
 {
     show_Bkg();
+
+    if (node == head)
+    {
+        if (flag)
+            node = node->next;
+        else
+            node = node->prev;
+    }
+
     if (node != head)
     {
         printf("%s\n", node->Data);
@@ -75,8 +84,64 @@ void switch_photo(P_Node node)
     cur_node = node;
 }
 
+void switch_slide_photo(P_Node node)
+{
+    show_Bkg();
+
+    if (node == head)
+    {
+        node = node->next;
+    }
+
+    if (node != head)
+    {
+        srand((unsigned)time(NULL));
+        int flag = rand() % 5;
+        switch (flag)
+        {
+        case 0:
+            pic_circular_spread(node->Data, p_lcd);
+            break;
+        case 1:
+            pic_down(node->Data, p_lcd);
+            break;
+        case 2:
+            pic_transverse_blinds(node->Data, p_lcd);
+            break;
+        case 3:
+            pic_mid_spread(node->Data, p_lcd);
+            break;
+        case 4:
+            pic_oblique_block(node->Data, p_lcd);
+            break;
+        default:
+            show_1152000bmp(node->Data, p_lcd);
+            break;
+        }
+
+        printf("%s\n", node->Data);
+
+        if (strstr(node->Data, ".bmp"))
+        {
+            show_1152000bmp(node->Data, p_lcd); //显示BMP图片
+        }
+        if (strstr(node->Data, ".jpg"))
+        {
+            lcd_draw_jpg(0, 0, node->Data, NULL, NULL, 0); //显示JPG图片
+        }
+    }
+}
+
 void slide_photo(P_Node node)
 {
+    P_Node cur_slide = node;
+    do
+    {
+        switch_slide_photo(cur_slide);
+        cur_slide = cur_slide->next;
+        sleep(2);
+    } while (slide_flag && cur_slide != node);
+    printf("slide exit!\n");
 }
 
 void delete_photo(P_Node node)
@@ -84,8 +149,9 @@ void delete_photo(P_Node node)
     if (node != head)
         return;
 
-    switch_photo(node->next);
+    switch_photo(node->next, true);
     char command[256] = {0};
+    printf("%s\n", command);
     sprintf(command, "rm %s", node->Data);
     system(command);
     Delete_Node(node);
@@ -97,6 +163,8 @@ void Album()
     Init_Album();
 
     cur_node = head;
+    show_Bkg();
+    show_albumUI();
 
     int tx = 0, ty = 0;
 
@@ -104,6 +172,10 @@ void Album()
     while (!stop)
     {
         int slide = get_ts(&tx, &ty); //获取触摸屏的坐标
+        if (slide_flag)
+        {
+            slide_flag = false;
+        }
         switch (slide)
         {
         case 0: // 非滑动
@@ -119,11 +191,11 @@ void Album()
             {
                 if (tx < 100 && tx > 0) //左翻
                 {
-                    switch_photo(cur_node->prev);
+                    switch_photo(cur_node->prev, false);
                 }
                 else if (tx > 700 && tx < 800) //右翻
                 {
-                    switch_photo(cur_node->next);
+                    switch_photo(cur_node->next, true);
                 }
                 else if (tx > 330 && tx < 390 && ty > 420) //从该图片开始播放幻灯片
                 {
@@ -139,13 +211,13 @@ void Album()
 
         case 3: //左滑
         {
-            switch_photo(cur_node->prev);
+            switch_photo(cur_node->prev, false);
         }
         break;
 
         case 4: //右滑
         {
-            switch_photo(cur_node->next);
+            switch_photo(cur_node->next, true);
         }
         break;
         }

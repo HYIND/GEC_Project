@@ -373,7 +373,7 @@ void Init_Game()
     add_count = 1;
 
     //打开字体
-    points_font = fontLoad("./simkai.ttf");
+    points_font = fontLoad("./softbrush.ttf");
     //字体大小的设置
     fontSetSize(points_font, 50);
 }
