@@ -14,21 +14,17 @@ void show_mainUI()
 void show_cameraUI()
 {
 
-    for (int i = 640; i < 800; i++)
-    {
-        for (int j = 0; j < 480; j++)
-        {
-            *(p_lcd + i + j * 800) = 0x000000;
-        }
-    }
+    clear_lcd_screen(0x000000, 0, 0, 800, 480, p_lcd);
+    show_location_bmp("windows_pic/exitphoto.bmp", 675, 10, 100, 100, p_lcd);
     show_location_bmp("windows_pic/takephoto.bmp", 675, 190, 100, 100, p_lcd);
-    show_location_bmp("windows_pic/exitphoto.bmp", 675, 0, 100, 100, p_lcd);
+    show_location_bmp("windows_pic/photo2.bmp", 675, 370, 100, 100, p_lcd);
 }
 
 void show_musicUI()
 {
-    show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd);                   // 音乐界面背景
-    show_location_bmp("windows_pic/musicUI.bmp", 0, 380, 600, 100, p_lcd); // 音乐界面控制台
+    show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd);                     // 音乐界面背景
+    show_location_bmp("windows_pic/musicUI.bmp", 0, 380, 500, 100, p_lcd); // 音乐界面控制台
+    show_location_bmp("windows_pic/bigmusic.bmp", 125, 50, 250, 250, p_lcd);
 }
 
 void show_videoUI()

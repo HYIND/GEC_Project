@@ -13,10 +13,10 @@ static int bar_rate = 0;
 
 static void show_bar() //显示进度条，bar_rate为百分比
 {
-    clear_lcd_screen(0x000000, 0, 350, 600, 30, p_lcd);                        // 进度条背景
-    clear_lcd_screen(0x858585, 20, 360, 560, 10, p_lcd);                       // 进度条
-    clear_lcd_screen(0xf38b00, 20, 360, (int)(bar_rate * 5.6), 10, p_lcd);     // 已播放的部分进度条绘橙色
-    clear_lcd_screen(0x000000, 5 + (int)(bar_rate * 5.6), 357, 30, 16, p_lcd); // 滑块
+    clear_lcd_screen(0x000000, 0, 350, 500, 30, p_lcd);                        // 进度条背景
+    clear_lcd_screen(0x858585, 20, 360, 460, 10, p_lcd);                       // 进度条
+    clear_lcd_screen(0xf38b00, 20, 360, (int)(bar_rate * 4.6), 10, p_lcd);     // 已播放的部分进度条绘橙色
+    clear_lcd_screen(0x000000, 5 + (int)(bar_rate * 4.6), 357, 30, 16, p_lcd); // 滑块
 }
 
 static void show_UI()

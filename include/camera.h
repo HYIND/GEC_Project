@@ -8,6 +8,7 @@
 #include "touch.h"
 #include "time.h"
 #include <stdlib.h>
+#include "UI.h"
 
 void Camera();
 
