@@ -11,6 +11,11 @@ void show_mainUI()
     show_location_bmp("windows_pic/camera.bmp", 50, 290, 100, 100, p_lcd);
 }
 
+void show_albumUI()
+{
+    show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd);
+}
+
 void show_cameraUI()
 {
 
