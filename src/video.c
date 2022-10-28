@@ -185,7 +185,7 @@ void Video()
         {
         case 0: // 非滑动
         {
-            if (tx > 700 && ty < 100)
+            if (tx > 700 && ty > 380)
             {
                 stop_flag = true; //退出
                 break;
@@ -249,16 +249,16 @@ void Video()
             send_cmd(fd_fifo, "volume +3\n");
         }
         break;
-        case 3: //左滑
-        {
-            printf("%s\n", "seek -10");
-            send_cmd(fd_fifo, "seek -10\n");
-        }
-        break;
-        case 4: //右滑
+        case 3: //右滑
         {
             printf("%s\n", "seek +10");
             send_cmd(fd_fifo, "seek +10\n");
+        }
+        break;
+        case 4: //左滑
+        {
+            printf("%s\n", "seek -10");
+            send_cmd(fd_fifo, "seek -10\n");
         }
         break;
         }

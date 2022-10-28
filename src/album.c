@@ -55,8 +55,6 @@ void Init_Album()
 
 void switch_photo(P_Node node, bool flag) // flag 向前/向后标志
 {
-    show_Bkg();
-
     if (node == head)
     {
         if (flag)
@@ -71,11 +69,14 @@ void switch_photo(P_Node node, bool flag) // flag 向前/向后标志
 
         if (strstr(node->Data, ".bmp"))
         {
-            show_1152000bmp(node->Data, p_lcd); //显示BMP图片
+            if (show_1152000bmp(node->Data, p_lcd) != 0) //显示BMP图片
+                show_Bkg();
         }
         if (strstr(node->Data, ".jpg"))
         {
-            lcd_draw_jpg(0, 0, node->Data, NULL, NULL, 0); //显示JPG图片
+            if (lcd_draw_jpg(0, 0, node->Data, NULL, NULL, 0) != 0) //显示JPG图片
+
+                show_Bkg();
         }
     }
 
@@ -145,7 +146,7 @@ void slide_photo(P_Node node)
 
 void delete_photo(P_Node node)
 {
-    if (node != head)
+    if (node == head)
         return;
 
     switch_photo(node->next, true);
@@ -187,51 +188,55 @@ void Album()
         {
             slide_flag = false;
         }
-        switch (slide)
+        else
         {
-        case 0: // 非滑动
-        case 1:
-        case 2:
-        {
-            if (tx > 700 && ty < 100)
+            switch (slide)
             {
-                stop = true; //退出
-                break;
-            }
-            else
+            case 0: // 非滑动
+            case 1:
+            case 2:
             {
-                if (tx < 100 && tx > 0) //左翻
+                if (tx > 700 && ty < 100)
                 {
-                    switch_photo(cur_node->prev, false);
+                    stop = true; //退出
+                    break;
                 }
-                else if (tx > 700 && tx < 800) //右翻
+                else
                 {
-                    switch_photo(cur_node->next, true);
-                }
-                else if (tx > 330 && tx < 390 && ty > 420) //从该图片开始播放幻灯片
-                {
-                    slide_flag = true;
-                    pthread_create(&slide_thread, NULL, &slide_photo, cur_node); //幻灯片
-                }
-                else if (tx > 410 && tx < 470 && ty > 420) //删除图片
-                {
-                    delete_photo(cur_node);
+                    if (tx < 100 && tx > 0) //左翻
+                    {
+                        switch_photo(cur_node->prev, false);
+                    }
+                    else if (tx > 700 && tx < 800) //右翻
+                    {
+                        switch_photo(cur_node->next, true);
+                    }
+                    else if (tx > 330 && tx < 390 && ty > 420) //从该图片开始播放幻灯片
+                    {
+                        slide_flag = true;
+                        pthread_create(&slide_thread, NULL, &slide_photo, cur_node); //幻灯片
+                    }
+                    else if (tx > 410 && tx < 470 && ty > 420) //删除图片
+                    {
+                        printf("delete\n");
+                        delete_photo(cur_node);
+                    }
                 }
             }
-        }
-        break;
+            break;
 
-        case 3: //左滑
-        {
-            switch_photo(cur_node->prev, false);
-        }
-        break;
+            case 3: //左滑
+            {
+                switch_photo(cur_node->prev, false);
+            }
+            break;
 
-        case 4: //右滑
-        {
-            switch_photo(cur_node->next, true);
-        }
-        break;
+            case 4: //右滑
+            {
+                switch_photo(cur_node->next, true);
+            }
+            break;
+            }
         }
     }
 }

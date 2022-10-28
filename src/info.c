@@ -5,7 +5,7 @@ void info()
     //打开字体
     font *points_font = fontLoad("./softbrush.ttf");
     //字体大小的设置
-    fontSetSize(points_font, 24);
+    fontSetSize(points_font, 40);
 
     bitmap *bm = createBitmapWithInit(500, 300, 4, getColor(0, 0, 0, 0));
 

@@ -34,15 +34,15 @@ void show_musicUI()
     show_location_bmp("windows_pic/musicUI.bmp", 0, 380, 500, 100, p_lcd); // 音乐界面控制台
     show_location_bmp("windows_pic/bigmusic.bmp", 125, 50, 252, 252, p_lcd);
     show_location_bmp("windows_pic/exitmusic.bmp", 748, 0, 52, 52, p_lcd);
-    show_location_bmp("windows_pic/prev.bmp",510,423,52,52,p_lcd);
-    show_location_bmp("windows_pic/prev.bmp",580,423,52,52,p_lcd);
+    show_location_bmp("windows_pic/prev.bmp", 510, 423, 52, 52, p_lcd);
+    show_location_bmp("windows_pic/next.bmp", 740, 423, 52, 52, p_lcd);
 }
 
 void show_videoUI()
 {
     clear_lcd_screen(COLOR_BLACK, 0, 0, 800, 480, p_lcd);
     show_location_bmp("windows_pic/musicUI.bmp", 150, 380, 500, 100, p_lcd);
-    show_location_bmp("windows_pic/exitmp4.bmp", 748, 0, 52, 52, p_lcd); // 视频界面控制台
+    show_location_bmp("windows_pic/exitmp4.bmp", 748, 404, 52, 52, p_lcd); // 视频界面控制台
 }
 
 void show_gameoverUI()
