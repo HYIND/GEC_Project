@@ -223,7 +223,7 @@ void Video()
                         play_flag = !play_flag;
                     }
                 }
-                else if (tx < 560 && tx > 380) //切换下一个视频
+                else if (tx < 560 && ty > 380) //切换下一个视频
                 {
                     printf("%s\n", "switch to next video");
                     switch_video(cur_node->next, true);

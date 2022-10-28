@@ -166,11 +166,11 @@ void switch_music(P_Node node, bool flag) // flag 向前/向后标志
     }
 
     //字体大小的设置
-    fontSetSize(text_font, 16);
+    fontSetSize(text_font, 18);
 
     bitmap *bm = createBitmapWithInit(200, 40, 4, getColor(0, 0, 0, 0));
 
-    fontPrint(text_font, bm, 10, 30, node->Data, getColor(0, 255, 255, 255), 290);
+    fontPrint(text_font, bm, 10, 10, node->Data, getColor(0, 255, 255, 255), 290);
 
     //把字体框输出到LCD屏幕上
     show_font_to_lcd(p_lcd, 0, 340, bm);

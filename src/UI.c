@@ -31,6 +31,7 @@ void show_musicUI()
 {
     show_1152000bmp("windows_pic/mainbkg.bmp", p_lcd); // 音乐界面背景
     clear_lcd_screen(0x000000, 500, 0, 300, 480, p_lcd);
+    clear_lcd_screen(0x000000, 0, 340, 200, 40, p_lcd);
     show_location_bmp("windows_pic/musicUI.bmp", 0, 380, 500, 100, p_lcd); // 音乐界面控制台
     show_location_bmp("windows_pic/bigmusic.bmp", 125, 50, 252, 252, p_lcd);
     show_location_bmp("windows_pic/exitmusic.bmp", 748, 0, 52, 52, p_lcd);
