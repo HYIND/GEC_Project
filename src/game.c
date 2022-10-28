@@ -406,13 +406,13 @@ bool Game()
         if (touch.type == EV_KEY && touch.code == BTN_TOUCH && touch.value == 0) //判断手是否离开
         {
             // 重新开始
-            if (P_I.x > 240 && P_I.x < 340 && P_I.y > 320 && P_I.y < 363)
+            if (P_I.x > 210 && P_I.x < 330 && P_I.y > 320 && P_I.y < 363)
             {
                 printf("restart game!\n");
                 return true;
             }
             // 退出游戏
-            else if (P_I.x > 380 && P_I.x < 480 && P_I.y > 320 && P_I.y < 363)
+            else if (P_I.x > 340 && P_I.x < 440 && P_I.y > 320 && P_I.y < 363)
             {
                 printf("exit game!\n");
                 return false;

@@ -212,41 +212,9 @@ void show_list_node(int count, P_Node node)
     destroyBitmap(bm);
 }
 
-/* void show_music_list()
-{
-    clear_lcd_screen(0x000000, 500, 70, 200, 350, p_lcd);
-    cur_list_node_start = cur_list_node_end->next;
-    if (cur_list_node_start == head)
-        cur_list_node_start = cur_list_node_start->next;
-
-    P_Node cur_node = cur_list_node_start;
-
-    int count = 0;
-    while (count < 5 && cur_node != head)
-    {
-        show_list_node(count, cur_node);
-        cur_node = cur_node->next;
-        count++;
-    }
-    cur_list_node_end = cur_node->prev;
-} */
-
-/* void list_play(int count)
-{
-    P_Node cur_node = cur_list_node_start;
-    while (count)
-    {
-        cur_node = cur_node->next;
-        if (cur_node == head)
-            return;
-        count--;
-    }
-    switch_music(cur_node, true);
-} */
-
 void show_music_list(int jump_index) // jump_index为跳转页数，从开始
 {
-    printf("cur_index:%d\n", jump_index);
+    printf("jump_index:%d\n", jump_index);
     printf("sum_index:%d\n", sum_index);
     if (jump_index <= 0 && jump_index > sum_index || sum_index == 0)
         return;
