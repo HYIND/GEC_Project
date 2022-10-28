@@ -46,6 +46,6 @@ void show_videoUI()
 void show_gameoverUI()
 {
     show_location_bmp("windows_pic/gameover.bmp", 205, 200, 240, 80, p_lcd);
-    show_location_bmp("windows_pic/restartgame.bmp", 240, 330, 100, 43, p_lcd);
-    show_location_bmp("windows_pic/exit.bmp", 380, 330, 100, 43, p_lcd);
+    show_location_bmp("windows_pic/restartgame.bmp", 210, 330, 100, 43, p_lcd);
+    show_location_bmp("windows_pic/exit.bmp", 340, 330, 100, 43, p_lcd);
 }

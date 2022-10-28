@@ -5,6 +5,7 @@
 #include "camera.h"
 #include "music.h"
 #include "video.h"
+#include "info.h"
 
 void main_process()
 {
@@ -49,6 +50,11 @@ void main_process()
             {
                 // loadig();
                 Camera();
+                show_mainUI();
+            }
+            if (P_I.x > 748 && P_I.y > 430)
+            {
+                info();
                 show_mainUI();
             }
         }

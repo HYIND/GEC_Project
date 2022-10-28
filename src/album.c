@@ -149,10 +149,19 @@ void delete_photo(P_Node node)
         return;
 
     switch_photo(node->next, true);
-    char command[256] = {0};
-    printf("%s\n", command);
-    sprintf(command, "rm %s", node->Data);
-    system(command);
+    // char command[256] = {0};
+    // sprintf(command, "rm %s", node->Data);
+    // printf("%s\n", command);
+    // system(command);
+
+    if (remove(node->Data) == 0)
+    {
+        printf("Removed %s.", node->next);
+    }
+    else
+    {
+        perror("remove");
+    }
     Delete_Node(node);
 }
 

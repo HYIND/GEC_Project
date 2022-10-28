@@ -195,7 +195,7 @@ void Video()
                 // 音量-
                 if (tx < 240 && ty > 380)
                 {
-                    printf("%s\n", "voice--");
+                    printf("%s\n", "voice-2");
                     send_cmd(fd_fifo, "volume -2\n");
                 }
                 else if (tx < 315 && ty > 380) //切换上一个视频
@@ -231,20 +231,36 @@ void Video()
                 // 音量+
                 else if (tx < 640 && ty > 380)
                 {
-                    printf("%s\n", "voice++");
+                    printf("%s\n", "voice+2");
                     send_cmd(fd_fifo, "volume +2\n");
                 }
             }
         }
         break;
-            // case 1: //下滑
-            //     break;
-            // case 2: //上滑
-            //     break;
-            // case 3: //左滑
-            //     break;
-            // case 4: //右滑
-            //     break;
+        case 1: //下滑
+        {
+            printf("%s\n", "voice-3");
+            send_cmd(fd_fifo, "volume -3\n");
+        }
+        break;
+        case 2: //上滑
+        {
+            printf("%s\n", "voice+3");
+            send_cmd(fd_fifo, "volume +3\n");
+        }
+        break;
+        case 3: //左滑
+        {
+            printf("%s\n", "seek -10");
+            send_cmd(fd_fifo, "seek -10\n");
+        }
+        break;
+        case 4: //右滑
+        {
+            printf("%s\n", "seek +10");
+            send_cmd(fd_fifo, "seek +10\n");
+        }
+        break;
         }
     }
     // pthread_join(bar_thread, NULL);
