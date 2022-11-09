@@ -1,11 +1,5 @@
 #include "album.h"
-#include <string.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include "deque.h"
-#include "show_bmp.h"
+
 
 P_Node cur_node; //当前正在访问的图片所在链表节点
 P_Node head;

@@ -149,21 +149,6 @@ void switch_video(P_Node node, bool flag)
     cur_node = node;
 }
 
-static void bar() // 进度条线程
-{
-    while (!stop_flag)
-    {
-        if (play_flag) //视频正在播放则更新进度条信息
-        {
-            // 1.获取进度条百分比
-
-            // 2.根据百分比绘进度条
-            show_bar();
-        }
-        usleep(500000);
-    }
-}
-
 void Video()
 {
     //初始化视频信息
@@ -173,9 +158,6 @@ void Video()
     show_videoUI();
 
     int tx = 0, ty = 0;
-
-    // pthread_t bar_thread;
-    // pthread_create(&bar_thread, NULL, &bar, NULL);
 
     stop_flag = false;
     while (!stop_flag)
@@ -263,7 +245,6 @@ void Video()
         break;
         }
     }
-    // pthread_join(bar_thread, NULL);
 
     close_video();
 }

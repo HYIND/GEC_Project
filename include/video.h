@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "deque.h"
+#include "delist.h"
 #include "show_bmp.h"
 #include "touch.h"
 #include <pthread.h>

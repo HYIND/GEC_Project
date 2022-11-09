@@ -181,21 +181,6 @@ void switch_music(P_Node node, bool flag) // flag 向前/向后标志
     cur_node = node;
 }
 
-static void bar() // 进度条线程
-{
-    while (!stop_flag)
-    {
-        if (play_flag) //音频正在播放则更新进度条信息
-        {
-            // 1.获取进度条百分比
-
-            // 2.根据百分比绘进度条
-            show_bar();
-        }
-        usleep(500000);
-    }
-}
-
 void show_list_node(int count, P_Node node)
 {
     //字体大小的设置
@@ -278,9 +263,6 @@ void Music()
     show_music_list(1); //显示第一页列表
 
     int tx = 0, ty = 0;
-
-    // pthread_t bar_thread;
-    // pthread_create(&bar_thread, NULL, &bar, NULL);
 
     stop_flag = false;
     while (!stop_flag)
@@ -374,7 +356,6 @@ void Music()
         break;
         }
     }
-    // pthread_join(bar_thread, NULL);
 
     close_music();
 }

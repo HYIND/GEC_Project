@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "touch.h"
-#include "deque.h"
+#include "delist.h"
 #include "show_bmp.h"
 #include <pthread.h>
 #include "UI.h"

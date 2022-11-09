@@ -6,6 +6,13 @@
 #include <stdbool.h>
 #include "UI.h"
 #include <pthread.h>
+#include <string.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include "delist.h"
+#include "show_bmp.h"
 
 void Album();
 
