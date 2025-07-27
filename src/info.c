@@ -9,7 +9,7 @@ void info()
 
     bitmap *bm = createBitmapWithInit(500, 300, 4, getColor(0, 0, 0, 0));
 
-    char info[] = "制作人：\n广大\n 计科194黄艺宣 1906100110 \n 计科194李龙威 1906100111 \n 计科194吴文海 1906100113";
+    char info[] = "制作人：\n广大\n 计科194xxx 1906100110 \n 计科19xxx 1906100111 \n 计科194xxx 1906100113";
 
     fontPrint(points_font, bm, 0, 0, info, getColor(0, 255, 255, 255), 500);
 
